@@ -149,7 +149,7 @@ public class ConfigurationView extends JDialog {
 
 		
 		//Remplissage port com
-		List<String> lesPortsCom = XbeeSender.listSerialPort();
+		List<String> lesPortsCom = XbeeSender.listSerialPort2();
 		this.PortComField.setModel(new DefaultComboBoxModel(lesPortsCom.toArray()));
 		
 		JLabel lblPartieLeapmotion = new JLabel("Partie LeapMotion : ");

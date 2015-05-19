@@ -10,8 +10,9 @@
 	<classpathentry kind="lib" path="slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="slf4j-ext-1.7.12.jar"/>
 	<classpathentry kind="lib" path="slf4j-jdk14-1.7.12.jar"/>
-	<classpathentry kind="lib" path="RXTXcomm.jar"/>
 	<classpathentry kind="lib" path="xbjlib-1.0.1.jar"/>
 	<classpathentry kind="lib" path="combozola.jar"/>
+	<classpathentry kind="lib" path="jssc-2.8.0.jar"/>
+	<classpathentry kind="lib" path="jssc-2.8.0-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

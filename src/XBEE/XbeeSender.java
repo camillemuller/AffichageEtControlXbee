@@ -4,9 +4,14 @@ package XBEE;
 
 import gnu.io.CommPortIdentifier;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.TreeSet;
+
+import jssc.SerialPortList;
 
 import com.digi.xbee.api.Raw802Device;
 import com.digi.xbee.api.exceptions.XBeeException;
@@ -29,28 +34,20 @@ XBeeAddress16 dst = new XBeeAddress16(0x00,0x01);
 Raw802Device myLocalXBeeDevice;
 
 
-public static List<String> listSerialPort()
+public static List<String> listSerialPort2()
 {
-	List<String> lesPorts = new ArrayList<String>();
+    String[] portNames = SerialPortList.getPortNames();
+    for(int i = 0; i < portNames.length; i++){
+        System.out.println(portNames[i]);
+    }
 	
-	  Enumeration<?> pList = CommPortIdentifier.getPortIdentifiers();
 
-	    // Process the list.
-	    while (pList.hasMoreElements()) {
-	      CommPortIdentifier cpi = (CommPortIdentifier) pList.nextElement();
-	      System.out.print("Port " + cpi.getName() + " ");
-	      if (cpi.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-	        System.out.println("is a Serial Port: " + cpi);
-	        lesPorts.add(cpi.getName());
-	      } else if (cpi.getPortType() == CommPortIdentifier.PORT_PARALLEL) {
-	        System.out.println("is a Parallel Port: " + cpi);
-	      } else {
-	        System.out.println("is an Unknown Port: " + cpi);
-	      }
-	    }
-	    
-	return lesPorts;
+    List<String> s = new ArrayList<String>();
+    Collections.addAll(s, portNames);
+    return s;
+
 }
+
 
 public XbeeSender(String serialP)
 {
