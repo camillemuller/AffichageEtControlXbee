@@ -2,21 +2,14 @@ package XBEE;
 
 
 
-import gnu.io.CommPortIdentifier;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.TreeSet;
-
 import jssc.SerialPortList;
-
 import com.digi.xbee.api.Raw802Device;
 import com.digi.xbee.api.exceptions.XBeeException;
 import com.digi.xbee.api.models.XBee16BitAddress;
-
 import Exception.ErrorSnd;
 import Exception.ErrorConnec;
 
@@ -25,14 +18,8 @@ import Exception.ErrorConnec;
 
 
 public class XbeeSender {
-	       
-/*XBee xb;
-String port;
-XBeeAddress16 dst = new XBeeAddress16(0x00,0x01);
-*/
-	
+	       	
 Raw802Device myLocalXBeeDevice;
-
 
 public static List<String> listSerialPort2()
 {
