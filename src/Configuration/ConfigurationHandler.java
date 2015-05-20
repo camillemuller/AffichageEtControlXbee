@@ -19,16 +19,8 @@ public class ConfigurationHandler {
 	//On crée un nouveau Document JDOM basé sur la racine que l'on vient de créer
 	static Document document = new Document(racine);
 
-	public ConfigurationHandler()
-	{
-		
-	}
-
-
 	public void sauvegarde(List<String> sesParams)
 	{
-
-
 		File ee = new File("Configuration.xml");
 		ee.delete();
 

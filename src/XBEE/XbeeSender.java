@@ -1,8 +1,5 @@
 package XBEE;
 
-
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,10 +9,6 @@ import com.digi.xbee.api.exceptions.XBeeException;
 import com.digi.xbee.api.models.XBee16BitAddress;
 import Exception.ErrorSnd;
 import Exception.ErrorConnec;
-
-
-
-
 
 public class XbeeSender {
 	       	

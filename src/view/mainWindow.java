@@ -45,9 +45,6 @@ public class mainWindow {
 				try {
 					mainWindow window = new mainWindow();
 					window.frmAffichageCamraEt.setVisible(true);
-					
-					
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
