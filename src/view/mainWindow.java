@@ -161,39 +161,15 @@ public class mainWindow {
 					leViewer.test(lesParams, leViewer);
 					rdbtnCamera.setSelected(true);
 
-					//String leP2 = lesP.get(2);
-					//final XbeeSender leSender = new XbeeSender(leP2);
 
 					TcpControlHandler PartieRaillet = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
 					// Envoie des commandes vers le xBee pas encore dans un autre thread a corriger 
 					
 					
-					final TcpControlHandler PartieRsp = new TcpControlHandler("192.168.0.18",10200);
-
-					TcpControlListener leListener = new TcpControlListener()
-					{
-
-						@Override
-						public void onReceive(String userInput) {
-							// TODO Auto-generated method stu
-								PartieRsp.send(userInput);
-						}
-
-					};
+					PartieRaillet.setSender(lesP.get(2),Integer.parseInt(lesP.get(7)));
 					
-
-					
-
-					PartieRaillet.setOnTcpControlHandlerListener(leListener);
 					// Lancement du thread TCP
 					(new Thread(PartieRaillet)).start();
-					
-
-					
-					
-					
-
-//					leSender.connection();
 
 				}catch(Exception ee){
 					rdbtnCamera.setSelected(false);
@@ -223,10 +199,6 @@ public class mainWindow {
 
 			}
 		});
-
-
-
-
 
 	}
 }

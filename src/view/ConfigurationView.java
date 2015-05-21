@@ -52,8 +52,10 @@ public class ConfigurationView extends JDialog {
 	private JFormattedTextField adrLeap;
 
 	private JSpinner portLeap;
+	private JSpinner portRsp;
 	private JSpinner varHauteur;
 	private JSpinner varLarger;
+	private JFormattedTextField adrRsp;
 	/*
 	 * LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 -f 29 -r 1280x720" -o "/usr/local/lib/output_http.so -w /usr/local/www -p 8080"
 	 * 
@@ -72,6 +74,7 @@ public class ConfigurationView extends JDialog {
 		MaskFormatter mf = null;
 		try {
 			mf = new MaskFormatter("###.###.###.###");
+		
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -177,7 +180,7 @@ public class ConfigurationView extends JDialog {
 			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		}
 
-		JFormattedTextField adrRsp = new JFormattedTextField(mf);
+	    adrRsp = new JFormattedTextField(mf);
 		adrRsp.setBounds(70, 238, 164, 38);
 		panel.add(adrRsp);
 		adrRsp.setMaximumSize(new Dimension(150, 100));
@@ -188,10 +191,10 @@ public class ConfigurationView extends JDialog {
 		label.setBounds(6, 249, 62, 16);
 		panel.add(label);
 
-		JSpinner PortRsp = new JSpinner();
-		PortRsp.setMaximumSize(new Dimension(100, 100));
-		PortRsp.setBounds(280, 238, 93, 38);
-		panel.add(PortRsp);
+	    portRsp = new JSpinner();
+		portRsp.setMaximumSize(new Dimension(100, 100));
+		portRsp.setBounds(280, 238, 93, 38);
+		panel.add(portRsp);
 
 		JLabel label_2 = new JLabel("Port :");
 		label_2.setBounds(238, 253, 33, 9);
@@ -317,42 +320,27 @@ public class ConfigurationView extends JDialog {
 						IPAdressValidator un = new IPAdressValidator();
 						if(!un.validate(adrLeap.getText()))
 						{
-							JOptionPane.showMessageDialog(null, "Adresse IP non valide", "Adresse IP",JOptionPane.WARNING_MESSAGE);	
+							JOptionPane.showMessageDialog(null, "Adresse IP non valide LeapMotion", "Adresse IP LeapMotion",JOptionPane.WARNING_MESSAGE);	
+							return;
+						}
+
+						IPAdressValidator un2 = new IPAdressValidator();
+						if(!un2.validate(adrRsp.getText()))
+						{
+							JOptionPane.showMessageDialog(null, "Adresse IP non valide Raspberry Pi", "Adresse IP Raspberry Pi",JOptionPane.WARNING_MESSAGE);	
 							return;
 						}
 
 						List<String> lesParams = new ArrayList<String>();
 						lesParams.add(URLfield.getText());
 						lesParams.add(PortField.getValue().toString());
-
-
-
-						//PARAM SERIAL
-						lesParams.add("");
-
-
-						/*		try
-						{
-							// Pas de port comm dispo
-
-
-						lesParams.add(PortComField.getSelectedItem().toString());
-					}catch(Exception e1)
-						{
-
-							JOptionPane.showMessageDialog(null, "Attention, il n'y a aucun port serie configuré !", "Port comm abs",JOptionPane.WARNING_MESSAGE);
-							lesParams.add("");
-						}
-						 */
-
+						lesParams.add(adrRsp.getText()); // Ancien serial port
 						lesParams.add(adrLeap.getText());
 						lesParams.add( portLeap.getValue().toString()  );
 						lesParams.add(varHauteur.getValue().toString() ); 
 						lesParams.add(varLarger.getValue().toString());
-
+						lesParams.add(portRsp.getValue().toString());
 						saVueP.changeP((int)varHauteur.getValue(), (int)varLarger.getValue());
-
-
 						sonCH.sauvegarde(lesParams);
 						dispose();
 					}
@@ -378,17 +366,19 @@ public class ConfigurationView extends JDialog {
 		List<String> lesOrigins;
 		try {
 			lesOrigins = this.sonCH.getSesparams();
-			if(!lesOrigins.isEmpty() && lesOrigins.size() == 7)
+			if(!lesOrigins.isEmpty() && lesOrigins.size() == 8)
 			{
 				this.URLfield.setText(lesOrigins.get(0));
 				this.PortField.setValue( Integer.parseInt(lesOrigins.get(1)) );
-				//this.lblPortComEnCours.setText (lesOrigins.get(2));
+				this.adrRsp.setText (lesOrigins.get(2));
 				this.adrLeap.setText(lesOrigins.get(3));
 				this.portLeap.setValue(Integer.parseInt(lesOrigins.get(4)) );
 				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(5))  );
 				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(6))  );
+				this.portRsp.setValue( Integer.parseInt(lesOrigins.get(7))  );
 
-
+				
+				
 			}
 
 		} catch (Exception e) {

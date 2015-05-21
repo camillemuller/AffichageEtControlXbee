@@ -39,9 +39,9 @@ public class ConfigurationHandler {
 
 
 		racine.addContent(PORT);
-		Element PORTCOM = new Element("PORTCOM");
-		PORTCOM.setText(sesParams.get(2));
-		racine.addContent(PORTCOM);
+		Element ADRRSPI = new Element("ADRRSPI");
+		ADRRSPI.setText(sesParams.get(2));
+		racine.addContent(ADRRSPI);
 
 
 		Element ADRLEAP =  new Element("ADRLEAP");
@@ -54,14 +54,18 @@ public class ConfigurationHandler {
 		racine.addContent(PORTLEAP);
 
 
-		Element VARLARG = new Element("VARLARG");
-		VARLARG.setText(sesParams.get(5));
-		racine.addContent(VARLARG);
+		Element VARHAUTEUR = new Element("VARHAUTEUR");
+		VARHAUTEUR.setText(sesParams.get(5));
+		racine.addContent(VARHAUTEUR);
 
 
-		Element VARLONG = new Element("VARLONG");
-		VARLONG.setText(sesParams.get(6));
-		racine.addContent(VARLONG);
+		Element VARLARGEUR = new Element("VARLARGEUR");
+		VARLARGEUR.setText(sesParams.get(6));
+		racine.addContent(VARLARGEUR);
+		
+		Element PORTRSPI = new Element("PORTRSPI");
+		PORTRSPI.setText(sesParams.get(7));
+		racine.addContent(PORTRSPI);
 
 
 		try
@@ -104,8 +108,8 @@ public class ConfigurationHandler {
 			laConfig.add(PORT.getValue());
 
 
-			Element PORTCOM = racine.getChild("PORTCOM");
-			laConfig.add(PORTCOM.getValue());
+			Element ADRRSPI = racine.getChild("ADRRSPI");
+			laConfig.add(ADRRSPI.getValue());
 
 			Element ADRLEAP = racine.getChild("ADRLEAP");
 			laConfig.add(ADRLEAP.getValue());
@@ -113,11 +117,18 @@ public class ConfigurationHandler {
 			Element PORTLEAP = racine.getChild("PORTLEAP");
 			laConfig.add(PORTLEAP.getValue());
 
-			Element VARLARG = racine.getChild("VARLARG");
-			laConfig.add(VARLARG.getValue());
+			Element VARHAUTEUR = racine.getChild("VARHAUTEUR");
+			laConfig.add(VARHAUTEUR.getValue());
 
-			Element VARLONG = racine.getChild("VARLONG");
-			laConfig.add(VARLONG.getValue());
+			Element VARLARGEUR = racine.getChild("VARLARGEUR");
+			laConfig.add(VARLARGEUR.getValue());
+			
+			
+			Element PORTRSPI = racine.getChild("PORTRSPI");
+			laConfig.add(PORTRSPI.getValue());
+
+			
+			
 			return laConfig;
 
 	
