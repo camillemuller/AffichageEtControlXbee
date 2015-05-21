@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-  <URL>http://148.61.171.201/axis-cgi/mjpg/video.cgi?camera=1</URL>
-  <PORT>80</PORT>
+  <URL>http://192.168.1.1:8080/?action=stream</URL>
+  <PORT>8080</PORT>
   <PORTCOM />
-  <ADRLEAP>111.111.111.111</ADRLEAP>
-  <PORTLEAP>23</PORTLEAP>
-  <VARLARG>487</VARLARG>
-  <VARLONG>365</VARLONG>
+  <ADRLEAP>192.168.000.018</ADRLEAP>
+  <PORTLEAP>5005</PORTLEAP>
+  <VARLARG>800</VARLARG>
+  <VARLONG>450</VARLONG>
 </Configuration>

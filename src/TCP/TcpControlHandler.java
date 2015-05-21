@@ -4,53 +4,86 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class TcpControlHandler implements Runnable {
 
 	private TcpControlListener sonListenerTcp;
-	private static int    _port;
-	private static Socket _socket;
-	
-	
+	private  int    _port;
+	private  Socket _socket;
+	private String ip;
+	private PrintWriter _output;
+	private InputStream _input;
+	private BufferedReader _response;
+
+
 	public void setOnTcpControlHandlerListener(TcpControlListener unListener)
 	{
 		this.sonListenerTcp = unListener;
+
 	}
 
-	public TcpControlHandler()
+	public void close(){
+
+		try {
+			_response.close();
+			_output.close();
+			_socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+
+	public TcpControlHandler(String ip,int port)
 	{
+
+		try {
+			this.ip = ip ; 
+			this._port = port;
+			_socket = new Socket(this.ip, this._port);
+			_output = new PrintWriter( _socket.getOutputStream());
+
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public void send(String a)
+	{
+
+		System.out.print(a);
+		_output.println(a);
+		_output.flush();
 
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		InputStream input   = null;
-
 		try
 		{
-			_port   = 23;
-			// si pas ip alors boucle local
-			_socket = new Socket("192.168.0.15", _port);
+			String userInput;
+			
+			
 
 			// Open stream
-			input = _socket.getInputStream();
-
-			// Show the server response
-			BufferedReader response = new BufferedReader(new InputStreamReader(input));
+			_input = _socket.getInputStream();
+			_response = new BufferedReader(new InputStreamReader(_input));
 
 
-			String userInput;
-
-			while ((userInput = response.readLine()) != null) 
+			
+			while ((userInput = _response.readLine()) != null) 
 			{
 				this.sonListenerTcp.onReceive(userInput);
 			}
 
 
-			System.out.println("Server message: " + response);
+			System.out.println("Server message: " + _response);
 		}
 		catch (UnknownHostException e)
 		{
@@ -59,18 +92,6 @@ public class TcpControlHandler implements Runnable {
 		catch (IOException e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				input.close();
-				_socket.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
 		}
 	}
 

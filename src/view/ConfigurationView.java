@@ -21,31 +21,23 @@ import java.util.List;
 
 import javax.swing.JSpinner;
 import javax.swing.Box;
-import javax.swing.border.EtchedBorder;
 import javax.swing.JComboBox;
 
 import Configuration.ConfigurationHandler;
 import Configuration.IPAdressValidator;
-import XBEE.XbeeSender;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTabbedPane;
 
 import java.awt.Font;
-
-import javax.swing.border.TitledBorder;
-
 import java.awt.Component;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.text.MaskFormatter;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 
 @SuppressWarnings("serial")
@@ -57,19 +49,19 @@ public class ConfigurationView extends JDialog {
 	private JLabel lblPort;
 	private ConfigurationHandler sonCH;
 	private JSpinner PortField;
-	private JComboBox<?> PortComField;
-	private JLabel lblPortComEnCours;
 	private JFormattedTextField adrLeap;
 
 	private JSpinner portLeap;
-	private JSpinner varLar;
-	private JSpinner varLong;
+	private JSpinner varHauteur;
+	private JSpinner varLarger;
 	/*
 	 * LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 -f 29 -r 1280x720" -o "/usr/local/lib/output_http.so -w /usr/local/www -p 8080"
 	 * 
 	 */
 
 	private mainWindow saVueP;
+	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Create the dialog.
@@ -77,10 +69,18 @@ public class ConfigurationView extends JDialog {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigurationView(mainWindow mainWindow) {
 
+		MaskFormatter mf = null;
+		try {
+			mf = new MaskFormatter("###.###.###.###");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		saVueP = mainWindow ;
 		setResizable(false);
 		getContentPane().setLayout(null);
-		setBounds(100, 100, 504, 549);
+		setBounds(100, 100, 502, 490);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -90,79 +90,183 @@ public class ConfigurationView extends JDialog {
 
 
 		//Remplissage port com
-		List<String> lesPortsCom = XbeeSender.listSerialPort2();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(6, 6, 495, 490);
+		tabbedPane.setBounds(6, 6, 492, 429);
 		contentPanel.add(tabbedPane);
 
 		Box verticalBox = Box.createVerticalBox();
-		tabbedPane.addTab("New tab", null, verticalBox, null);
+		tabbedPane.addTab("Partie Communcation et IHM", null, verticalBox, null);
 		verticalBox.setBorder(null);
 
-		Box verticalBox_3 = Box.createVerticalBox();
-		verticalBox_3.setAlignmentX(CENTER_ALIGNMENT);
-
-		verticalBox_3.setMaximumSize(new Dimension(450,200));
-
-		verticalBox_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		verticalBox.add(verticalBox_3);
-		{
-			JLabel lblPartieCamra = new JLabel("Partie caméra :        ");
-			lblPartieCamra.setAlignmentX(Component.CENTER_ALIGNMENT);
-			verticalBox_3.add(lblPartieCamra);
-			lblPartieCamra.setFont(lblPartieCamra.getFont().deriveFont(lblPartieCamra.getFont().getStyle() | Font.BOLD));
-		}
-
-		Box horizontalBox = Box.createHorizontalBox();
-		verticalBox_3.add(horizontalBox);
+		JPanel panel = new JPanel();
+		verticalBox.add(panel);
+		panel.setLayout(null);
 		{
 			lblLienDuServer = new JLabel("Lien du server : ");
-			horizontalBox.add(lblLienDuServer);
+			lblLienDuServer.setBounds(6, 29, 100, 16);
+			panel.add(lblLienDuServer);
+		}
+		{
+			JLabel lblPartieCamra = new JLabel("Partie caméra :        ");
+			lblPartieCamra.setBounds(6, 6, 132, 16);
+			panel.add(lblPartieCamra);
+			lblPartieCamra.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblPartieCamra.setFont(lblPartieCamra.getFont().deriveFont(lblPartieCamra.getFont().getStyle() | Font.BOLD));
 		}
 		{
 			URLfield = new JTextField();
-			horizontalBox.add(URLfield);
+			URLfield.setToolTipText("http://....");
+			URLfield.setBounds(118, 18, 349, 38);
+			panel.add(URLfield);
 			URLfield.setColumns(10);
 			URLfield.setMaximumSize(new Dimension(400,100));
 
 		}
-
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		verticalBox_3.add(horizontalBox_1);
-		{
-			lblPort = new JLabel("Port :");
-			horizontalBox_1.add(lblPort);
-		}
 		{
 			PortField = new JSpinner();
-			horizontalBox_1.add(PortField);
+			PortField.setBounds(118, 68, 94, 38);
+			panel.add(PortField);
 			PortField.setMaximumSize(new Dimension(100,100));
 
 		}
-
-		JLabel lblRsolutionCamra = new JLabel("Résolution caméra : ");
-		lblRsolutionCamra.setAlignmentX(Component.CENTER_ALIGNMENT);
-		verticalBox_3.add(lblRsolutionCamra);
-
-		Box horizontalBox_6 = Box.createHorizontalBox();
-		horizontalBox_6.setMaximumSize(new Dimension(450,100));
-		verticalBox_3.add(horizontalBox_6);
+		{
+			lblPort = new JLabel("Port :");
+			lblPort.setBounds(6, 79, 33, 16);
+			panel.add(lblPort);
+		}
 
 		JLabel lblTypeEcran = new JLabel("Format :");
-		horizontalBox_6.add(lblTypeEcran);
+		lblTypeEcran.setBounds(6, 164, 52, 16);
+		panel.add(lblTypeEcran);
 
 		final JComboBox varFormat = new JComboBox();
+		varFormat.setBounds(64, 145, 94, 56);
+		panel.add(varFormat);
 		varFormat.setModel(new DefaultComboBoxModel(new String[] {"4/3", "16/9", "16/10"}));
-		horizontalBox_6.add(varFormat);
 
-		JLabel lblLargeur_1 = new JLabel("Largeur :");
-		horizontalBox_6.add(lblLargeur_1);
+		JLabel lblLargeur_1 = new JLabel("Hauteur");
+		lblLargeur_1.setBounds(157, 164, 55, 16);
+		panel.add(lblLargeur_1);
 
-		varLar = new JSpinner();
-		varLar.setMaximumSize(new Dimension(100,50));
+		varHauteur = new JSpinner();
+		varHauteur.setBounds(213, 147, 82, 50);
+		panel.add(varHauteur);
+		varHauteur.setMaximumSize(new Dimension(100,50));
 
-		varLar.addChangeListener(new ChangeListener() {
+		JLabel lblLargeur = new JLabel("Largeur");
+		lblLargeur.setBounds(298, 164, 63, 16);
+		panel.add(lblLargeur);
+
+		varLarger = new JSpinner();
+		varLarger.setBounds(373, 147, 82, 50);
+		panel.add(varLarger);
+		varLarger.setMaximumSize(new Dimension(100,50));
+
+		JLabel lblRsolutionCamra = new JLabel("Résolution caméra : ");
+		lblRsolutionCamra.setFont(new Font("Lucida Grande", Font.ITALIC, 13));
+		lblRsolutionCamra.setBounds(6, 136, 128, 16);
+		panel.add(lblRsolutionCamra);
+		lblRsolutionCamra.setAlignmentX(Component.CENTER_ALIGNMENT);
+		{
+			JLabel lblPartieContrle = new JLabel("Partie contrôle ( Raspberry ) :");
+			lblPartieContrle.setBounds(6, 210, 197, 16);
+			panel.add(lblPartieContrle);
+			lblPartieContrle.setAlignmentX(Component.LEFT_ALIGNMENT);
+			lblPartieContrle.setAlignmentX(Component.LEFT_ALIGNMENT);
+			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		}
+
+		JFormattedTextField adrRsp = new JFormattedTextField(mf);
+		adrRsp.setBounds(70, 238, 164, 38);
+		panel.add(adrRsp);
+		adrRsp.setMaximumSize(new Dimension(150, 100));
+		adrRsp.setHorizontalAlignment(SwingConstants.CENTER);
+		adrRsp.setColumns(1);
+
+		JLabel label = new JLabel("Adresse : ");
+		label.setBounds(6, 249, 62, 16);
+		panel.add(label);
+
+		JSpinner PortRsp = new JSpinner();
+		PortRsp.setMaximumSize(new Dimension(100, 100));
+		PortRsp.setBounds(280, 238, 93, 38);
+		panel.add(PortRsp);
+
+		JLabel label_2 = new JLabel("Port :");
+		label_2.setBounds(238, 253, 33, 9);
+		panel.add(label_2);
+
+		JLabel lblPartieLeapmotion = new JLabel("Partie LeapMotion : ");
+		lblPartieLeapmotion.setBounds(5, 307, 133, 16);
+		panel.add(lblPartieLeapmotion);
+		lblPartieLeapmotion.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblPartieLeapmotion.setHorizontalAlignment(SwingConstants.LEFT);
+		lblPartieLeapmotion.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+
+		adrLeap = new JFormattedTextField(mf);
+		adrLeap.setBounds(70, 332, 164, 38);
+		panel.add(adrLeap);
+		adrLeap.setHorizontalAlignment(SwingConstants.CENTER);
+
+		adrLeap.setColumns(1);
+		adrLeap.setMaximumSize(new Dimension(150,100));
+
+		JLabel lblAdresse = new JLabel("Adresse : ");
+		lblAdresse.setBounds(6, 343, 62, 16);
+		panel.add(lblAdresse);
+
+		JLabel label_1 = new JLabel("Port :");
+		label_1.setBounds(238, 347, 33, 9);
+		panel.add(label_1);
+
+		portLeap = new JSpinner();
+		portLeap.setBounds(280, 332, 93, 38);
+		panel.add(portLeap);
+		portLeap.setMaximumSize(new Dimension(100,100));
+		
+		JButton btnTesterLeLien = new JButton("Test");
+		btnTesterLeLien.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnTesterLeLien.setBounds(385, 68, 82, 38);
+		panel.add(btnTesterLeLien);
+		
+		JButton button = new JButton("Test");
+		button.setBounds(385, 239, 82, 38);
+		panel.add(button);
+		
+		JButton button_1 = new JButton("Test");
+		button_1.setBounds(385, 333, 82, 38);
+		panel.add(button_1);
+
+		Box TabRobot = Box.createVerticalBox();
+		tabbedPane.addTab("Configuration Voiture", null, TabRobot, null);
+
+		JPanel TabComIhm = new JPanel();
+		TabRobot.add(TabComIhm);
+		TabComIhm.setLayout(null);
+		
+		JLabel lblVitesseMaximal = new JLabel("Vitesse maximal (m) : ");
+		lblVitesseMaximal.setBounds(35, 133, 154, 16);
+		TabComIhm.add(lblVitesseMaximal);
+		
+		JLabel lblDistanceDarrt = new JLabel("Distance d'arrêt (m) : ");
+		lblDistanceDarrt.setBounds(35, 231, 154, 16);
+		TabComIhm.add(lblDistanceDarrt);
+		
+		textField = new JTextField();
+		textField.setBounds(201, 127, 134, 28);
+		TabComIhm.add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(201, 225, 134, 28);
+		TabComIhm.add(textField_1);
+
+		varHauteur.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 
 				switch(varFormat.getSelectedItem().toString())
@@ -170,142 +274,35 @@ public class ConfigurationView extends JDialog {
 				case "4/3":
 				{
 
-					float lon= Float.parseFloat(  varLar.getValue().toString() ) ;
+					float lon= Float.parseFloat(  varHauteur.getValue().toString() ) ;
 
 					lon = lon*(float)(3.0/4.0);
 
-					varLong.setValue(Math.round( lon)  );
+					varLarger.setValue(Math.round( lon)  );
 
 					break;
 				}
 				case "16/9":
 				{
-					float lon= Float.parseFloat(  varLar.getValue().toString() ) ;
+					float lon= Float.parseFloat(  varHauteur.getValue().toString() ) ;
 
-					lon = lon*(float)(16.0/9.0);
+					lon = lon*(float)(9.0/16.0);
 
-					varLong.setValue(Math.round( lon)  );
+					varLarger.setValue(Math.round( lon)  );
 					break;
 				}
 				case "16/10":
 				{
-					float lon= Float.parseFloat(  varLar.getValue().toString() ) ;
+					float lon= Float.parseFloat(  varHauteur.getValue().toString() ) ;
 
-					lon = lon*(float)(16.0/10.0);
+					lon = lon*(float)(10.0/16.0);
 
-					varLong.setValue(Math.round( lon)  );
+					varLarger.setValue(Math.round( lon)  );
 					break;
 				}
 				}
 			}
 		});
-
-
-		horizontalBox_6.add(varLar);
-
-		JLabel lblLargeur = new JLabel("Longeur : ");
-		horizontalBox_6.add(lblLargeur);
-
-		varLong = new JSpinner();
-		horizontalBox_6.add(varLong);
-		varLong.setMaximumSize(new Dimension(100,50));
-
-
-		Box verticalBox_1 = Box.createVerticalBox();
-		verticalBox_1.setAlignmentX(CENTER_ALIGNMENT);
-		verticalBox_1.setMaximumSize(new Dimension(450,100));
-		verticalBox_1.setMinimumSize(new Dimension(450,100));
-
-		verticalBox.add(verticalBox_1);
-		verticalBox_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		{
-			JLabel lblPartieContrle = new JLabel("Partie contrôle ( Xbee) :");
-			lblPartieContrle.setAlignmentX(Component.LEFT_ALIGNMENT);
-			
-			verticalBox_1.add(lblPartieContrle);
-			lblPartieContrle.setAlignmentX(Component.LEFT_ALIGNMENT);
-			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		}
-
-		Box horizontalBox_2 = Box.createHorizontalBox();
-		horizontalBox_2.setAlignmentX(Component.RIGHT_ALIGNMENT);
-
-		verticalBox_1.add(horizontalBox_2);
-		{
-			JLabel lblPortCom = new JLabel("Port com :");
-			horizontalBox_2.add(lblPortCom);
-		}
-		{
-			PortComField = new JComboBox();
-			horizontalBox_2.add(PortComField);
-		}
-
-		Box horizontalBox_3 = Box.createHorizontalBox();
-		horizontalBox_2.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		verticalBox_1.add(horizontalBox_3);
-
-		JLabel lblPortComActuel = new JLabel("Port com actuel  :");
-		lblPortComActuel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblPortComActuel.setHorizontalAlignment(SwingConstants.LEFT);
-		horizontalBox_3.add(lblPortComActuel);
-
-
-		lblPortComEnCours = new JLabel("XX");
-		lblPortComEnCours.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblPortComEnCours.setHorizontalAlignment(SwingConstants.LEFT);
-		horizontalBox_3.add(lblPortComEnCours);
-		this.PortComField.setModel(new DefaultComboBoxModel(lesPortsCom.toArray()));
-
-		Box verticalBox_2 = Box.createVerticalBox();
-		verticalBox_2.setAlignmentX(CENTER_ALIGNMENT);
-		verticalBox_2.setMinimumSize(new Dimension(450,100));
-		verticalBox_2.setMaximumSize(new Dimension(450,100));
-		
-		verticalBox.add(verticalBox_2);
-		verticalBox_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-
-		JLabel lblPartieLeapmotion = new JLabel("Partie LeapMotion : ");
-		lblPartieLeapmotion.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblPartieLeapmotion.setHorizontalAlignment(SwingConstants.LEFT);
-		verticalBox_2.add(lblPartieLeapmotion);
-		lblPartieLeapmotion.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-
-		Box horizontalBox_4 = Box.createHorizontalBox();
-		horizontalBox_4.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-		verticalBox_2.add(horizontalBox_4);
-
-		JLabel lblAdresse = new JLabel("Adresse : ");
-		horizontalBox_4.add(lblAdresse);
-
-	    try {
-			MaskFormatter mf = new MaskFormatter("###.###.###.###");
-			
-			adrLeap = new JFormattedTextField(mf);
-			adrLeap.setHorizontalAlignment(SwingConstants.CENTER);
-
-			adrLeap.setColumns(1);
-			adrLeap.setMaximumSize(new Dimension(150,100));
-			horizontalBox_4.add(adrLeap);
-		} catch (ParseException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		
-
-		Box horizontalBox_5 = Box.createHorizontalBox();
-		horizontalBox_5.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-		verticalBox_2.add(horizontalBox_5);
-
-		JLabel label_1 = new JLabel("Port :");
-		horizontalBox_5.add(label_1);
-
-		portLeap = new JSpinner();
-		portLeap.setMaximumSize(new Dimension(100,100));
-
-		horizontalBox_5.add(portLeap);
-		verticalBox_2.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{lblPartieLeapmotion, horizontalBox_4, lblAdresse, adrLeap, horizontalBox_5, label_1, portLeap}));
 
 		{
 			JPanel buttonPane = new JPanel();
@@ -316,7 +313,7 @@ public class ConfigurationView extends JDialog {
 				Sauvegarder.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						
+
 						IPAdressValidator un = new IPAdressValidator();
 						if(!un.validate(adrLeap.getText()))
 						{
@@ -329,29 +326,31 @@ public class ConfigurationView extends JDialog {
 						lesParams.add(PortField.getValue().toString());
 
 
-		
 
-						try
+						//PARAM SERIAL
+						lesParams.add("");
+
+
+						/*		try
 						{
 							// Pas de port comm dispo
-							lesParams.add(PortComField.getSelectedItem().toString());
-						}catch(Exception e1)
+
+
+						lesParams.add(PortComField.getSelectedItem().toString());
+					}catch(Exception e1)
 						{
 
 							JOptionPane.showMessageDialog(null, "Attention, il n'y a aucun port serie configuré !", "Port comm abs",JOptionPane.WARNING_MESSAGE);
-							
-
-							
 							lesParams.add("");
 						}
+						 */
 
-					
 						lesParams.add(adrLeap.getText());
 						lesParams.add( portLeap.getValue().toString()  );
-						lesParams.add(varLar.getValue().toString() ); 
-						lesParams.add(varLong.getValue().toString());
+						lesParams.add(varHauteur.getValue().toString() ); 
+						lesParams.add(varLarger.getValue().toString());
 
-						saVueP.changeP((int)varLar.getValue(), (int)varLong.getValue());
+						saVueP.changeP((int)varHauteur.getValue(), (int)varLarger.getValue());
 
 
 						sonCH.sauvegarde(lesParams);
@@ -383,11 +382,11 @@ public class ConfigurationView extends JDialog {
 			{
 				this.URLfield.setText(lesOrigins.get(0));
 				this.PortField.setValue( Integer.parseInt(lesOrigins.get(1)) );
-				this.lblPortComEnCours.setText (lesOrigins.get(2));
+				//this.lblPortComEnCours.setText (lesOrigins.get(2));
 				this.adrLeap.setText(lesOrigins.get(3));
 				this.portLeap.setValue(Integer.parseInt(lesOrigins.get(4)) );
-				this.varLar.setValue( Integer.parseInt(lesOrigins.get(5))  );
-				this.varLong.setValue( Integer.parseInt(lesOrigins.get(6))  );
+				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(5))  );
+				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(6))  );
 
 
 			}
