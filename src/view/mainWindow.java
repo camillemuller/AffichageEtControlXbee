@@ -162,14 +162,14 @@ public class mainWindow {
 					rdbtnCamera.setSelected(true);
 
 
-					TcpControlHandler PartieRaillet = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
+				//	TcpControlHandler PartieRaillet = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
 					// Envoie des commandes vers le xBee pas encore dans un autre thread a corriger 
 					
 					
-					PartieRaillet.setSender(lesP.get(2),Integer.parseInt(lesP.get(7)));
+				//	PartieRaillet.setSender(lesP.get(2),Integer.parseInt(lesP.get(7)));
 					
 					// Lancement du thread TCP
-					(new Thread(PartieRaillet)).start();
+				//	(new Thread(PartieRaillet)).start();
 
 				}catch(Exception ee){
 					rdbtnCamera.setSelected(false);
