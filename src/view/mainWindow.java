@@ -1,9 +1,11 @@
 package view;
 
 import javax.swing.JFrame;
+
 import Configuration.ConfigurationHandler;
 import TCP.TcpControlHandler;
 import TCP.TcpControlListener;
+
 import com.charliemouse.cambozola.Viewer;
 
 import javax.swing.JLabel;
@@ -23,6 +25,8 @@ import javax.swing.Box;
 import javax.swing.border.EtchedBorder;
 
 import java.awt.BorderLayout;
+import javax.swing.JProgressBar;
+import javax.swing.JPanel;
 
 
 public class mainWindow {
@@ -90,6 +94,8 @@ public class mainWindow {
 		frmAffichageCamraEt.setTitle("Affichage caméra et retransmission xBee");
 		frmAffichageCamraEt.setResizable(false);
 		frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(5)), Integer.parseInt( lesP.get(6)) );
+
+//		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
 		frmAffichageCamraEt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAffichageCamraEt.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -131,6 +137,12 @@ public class mainWindow {
 
 		JRadioButton rdbtnLeapMotion = new JRadioButton("Leap motion");
 		verticalBox.add(rdbtnLeapMotion);
+		
+		JLabel lblVoiture = new JLabel("Voiture : ");
+		verticalBox_1.add(lblVoiture);
+		
+		final VoiturePanel VoitureP = new VoiturePanel();
+		verticalBox_1.add(VoitureP);
 
 
 		btnConnect.addMouseListener(new MouseAdapter() {
@@ -162,15 +174,50 @@ public class mainWindow {
 					rdbtnCamera.setSelected(true);
 
 
-				//	TcpControlHandler PartieRaillet = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
+				final TcpControlHandler LeapTcp = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
 					// Envoie des commandes vers le xBee pas encore dans un autre thread a corriger 
 					
-					
-				//	PartieRaillet.setSender(lesP.get(2),Integer.parseInt(lesP.get(7)));
+				final TcpControlHandler RaspTcp = new TcpControlHandler(lesP.get(2),Integer.parseInt( lesP.get(7)));
+
 					
 					// Lancement du thread TCP
-				//	(new Thread(PartieRaillet)).start();
+					(new Thread(LeapTcp)).start();
+					(new Thread(RaspTcp)).start();
+					
+					
+					/*Renvoie des données vers le Rsp*/
+					TcpControlListener lstLeap = new TcpControlListener(){
+						
 
+						public void onReceive(String userInput)
+						{
+							System.out.println(userInput);
+							RaspTcp.send(userInput);
+						}
+
+						
+					};
+					
+					LeapTcp.setOnTcpControlHandlerListener(lstLeap);
+
+					/*Recupération d'informations venant du rasp*/
+					//{"informations":{"distance":30}}
+					TcpControlListener lstRsp = new TcpControlListener(){
+						
+
+						public void onReceive(String userInput)
+						{
+							int  idx= userInput.indexOf("}");
+							String valeur = (String) userInput.subSequence(idx-2, idx);
+							VoitureP.changeDistance(valeur);
+							
+						}
+
+						
+					};
+					
+					RaspTcp.setOnTcpControlHandlerListener(lstRsp);
+					
 				}catch(Exception ee){
 					rdbtnCamera.setSelected(false);
 					ee.printStackTrace();

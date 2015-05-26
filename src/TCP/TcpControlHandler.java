@@ -18,10 +18,6 @@ public class TcpControlHandler implements Runnable {
 	private InputStream _input;
 	private BufferedReader _response;
 	
-	private  int    _portS;
-	private  Socket _socketS;
-	private String ipS;
-	private PrintWriter _outputS;
 
 
 
@@ -62,21 +58,12 @@ public class TcpControlHandler implements Runnable {
 
 	public void send(String a)
 	{
-
-		System.out.print(a);
 		_output.println(a);
 		_output.flush();
 
 	}
 	
-	public void sendS(String a)
-	{
-
-		System.out.print(a);
-		_outputS.println(a);
-		_outputS.flush();
-
-	}
+	
 
 	@Override
 	public void run() {
@@ -94,8 +81,7 @@ public class TcpControlHandler implements Runnable {
 			
 			while ((userInput = _response.readLine()) != null) 
 			{
-				//this.sonListenerTcp.onReceive(userInput);
-				this.sendS(userInput);
+				this.sonListenerTcp.onReceive(userInput);
 			}
 
 
@@ -112,29 +98,6 @@ public class TcpControlHandler implements Runnable {
 	}
 	
 	
-	public void connectSender()
-	{
-		try {
-			this._socketS = new Socket(this.ipS, this._portS);
-			this._outputS = new PrintWriter( _socketS.getOutputStream());
 
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void setSender(String IP, int PORT) {
-		// TODO Auto-generated method stub
-		
-
-			this.ipS = IP;
-			this._portS = PORT;
-			this.connectSender();
-
-	}
 
 }

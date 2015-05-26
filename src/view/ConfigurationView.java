@@ -15,6 +15,11 @@ import javax.swing.JTextField;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,7 @@ import java.awt.Component;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.text.MaskFormatter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -74,7 +80,7 @@ public class ConfigurationView extends JDialog {
 		MaskFormatter mf = null;
 		try {
 			mf = new MaskFormatter("###.###.###.###");
-		
+
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -180,7 +186,7 @@ public class ConfigurationView extends JDialog {
 			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		}
 
-	    adrRsp = new JFormattedTextField(mf);
+		adrRsp = new JFormattedTextField(mf);
 		adrRsp.setBounds(70, 238, 164, 38);
 		panel.add(adrRsp);
 		adrRsp.setMaximumSize(new Dimension(150, 100));
@@ -191,7 +197,7 @@ public class ConfigurationView extends JDialog {
 		label.setBounds(6, 249, 62, 16);
 		panel.add(label);
 
-	    portRsp = new JSpinner();
+		portRsp = new JSpinner();
 		portRsp.setMaximumSize(new Dimension(100, 100));
 		portRsp.setBounds(280, 238, 93, 38);
 		panel.add(portRsp);
@@ -227,19 +233,37 @@ public class ConfigurationView extends JDialog {
 		portLeap.setBounds(280, 332, 93, 38);
 		panel.add(portLeap);
 		portLeap.setMaximumSize(new Dimension(100,100));
-		
+
 		JButton btnTesterLeLien = new JButton("Test");
 		btnTesterLeLien.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				URL u;
+				try {
+					u = new URL("http://www.example.com/");
+				HttpURLConnection huc = null;
+				huc.setRequestMethod("GET"); 
+				huc.connect() ; 
+				OutputStream os = huc.getOutputStream(); 
+				int code = huc.getResponseCode(); 
+				
+				System.out.println();
+				
+					huc = (HttpURLConnection)u.openConnection();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				 } 
+			
+
 			}
 		});
 		btnTesterLeLien.setBounds(385, 68, 82, 38);
 		panel.add(btnTesterLeLien);
-		
+
 		JButton button = new JButton("Test");
 		button.setBounds(385, 239, 82, 38);
 		panel.add(button);
-		
+
 		JButton button_1 = new JButton("Test");
 		button_1.setBounds(385, 333, 82, 38);
 		panel.add(button_1);
@@ -250,20 +274,20 @@ public class ConfigurationView extends JDialog {
 		JPanel TabComIhm = new JPanel();
 		TabRobot.add(TabComIhm);
 		TabComIhm.setLayout(null);
-		
+
 		JLabel lblVitesseMaximal = new JLabel("Vitesse maximal (m) : ");
 		lblVitesseMaximal.setBounds(35, 133, 154, 16);
 		TabComIhm.add(lblVitesseMaximal);
-		
+
 		JLabel lblDistanceDarrt = new JLabel("Distance d'arrêt (m) : ");
 		lblDistanceDarrt.setBounds(35, 231, 154, 16);
 		TabComIhm.add(lblDistanceDarrt);
-		
+
 		textField = new JTextField();
 		textField.setBounds(201, 127, 134, 28);
 		TabComIhm.add(textField);
 		textField.setColumns(10);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
 		textField_1.setBounds(201, 225, 134, 28);
@@ -377,8 +401,8 @@ public class ConfigurationView extends JDialog {
 				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(6))  );
 				this.portRsp.setValue( Integer.parseInt(lesOrigins.get(7))  );
 
-				
-				
+
+
 			}
 
 		} catch (Exception e) {

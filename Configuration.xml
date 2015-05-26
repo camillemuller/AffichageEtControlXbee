@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-  <URL>http://cam1.uridium.ch/axis-cgi/mjpg/video.cgi?camera=1</URL>
+  <URL>http://192.168.1.1/?action=stream</URL>
   <PORT>8080</PORT>
-  <ADRRSPI>192.168.000.014</ADRRSPI>
-  <ADRLEAP>192.168.000.014</ADRLEAP>
+  <ADRRSPI>192.168.001.001</ADRRSPI>
+  <ADRLEAP>192.168.001.002</ADRLEAP>
   <PORTLEAP>5005</PORTLEAP>
   <VARHAUTEUR>800</VARHAUTEUR>
   <VARLARGEUR>600</VARLARGEUR>
