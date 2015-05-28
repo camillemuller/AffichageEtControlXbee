@@ -18,9 +18,6 @@ public class TcpControlHandler implements Runnable {
 	private InputStream _input;
 	private BufferedReader _response;
 	
-
-
-
 	public void setOnTcpControlHandlerListener(TcpControlListener unListener)
 	{
 		this.sonListenerTcp = unListener;
@@ -42,28 +39,42 @@ public class TcpControlHandler implements Runnable {
 	public TcpControlHandler(String ip,int port)
 	{
 
-		try {
-			this.ip = ip ; 
-			this._port = port;
-			_socket = new Socket(this.ip, this._port);
-			_output = new PrintWriter( _socket.getOutputStream());
-
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.ip = ip ; 
+		this._port = port;
 	}
 
 
 	public void send(String a)
 	{
+	
+		if(_socket == null)
+		{
+			this.connect();
+		}
+		if(!_socket.isConnected())
+		{
+			this.connect();
+		}
 		_output.println(a);
 		_output.flush();
 
 	}
 	
 	
+	public void connect()
+	{
+		try {
+			_socket = new Socket(this.ip, this._port);
+			_output = new PrintWriter( _socket.getOutputStream());
+			_input = _socket.getInputStream();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
+	}
 
 	@Override
 	public void run() {
@@ -71,20 +82,27 @@ public class TcpControlHandler implements Runnable {
 		{
 			String userInput;
 			
+			if(_socket == null)
+			{
+				this.connect();
+			}
+			if(!_socket.isConnected())
+			{
+				this.connect();
+			}
 			
-
 			// Open stream
-			_input = _socket.getInputStream();
 			_response = new BufferedReader(new InputStreamReader(_input));
-
-
+		
+			
+			
 			
 			while ((userInput = _response.readLine()) != null) 
 			{
 				this.sonListenerTcp.onReceive(userInput);
 			}
-
-
+			
+			
 			System.out.println("Server message: " + _response);
 		}
 		catch (UnknownHostException e)

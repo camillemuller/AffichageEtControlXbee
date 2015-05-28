@@ -10,6 +10,7 @@ import com.charliemouse.cambozola.Viewer;
 
 import javax.swing.JLabel;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
@@ -24,14 +25,16 @@ import javax.swing.JRadioButton;
 import javax.swing.Box;
 import javax.swing.border.EtchedBorder;
 
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.awt.BorderLayout;
-import javax.swing.JProgressBar;
-import javax.swing.JPanel;
 
 
 public class mainWindow {
 
 	private JFrame frmAffichageCamraEt;
+	private JFrame PanelVoiture;
 
 	/**
 	 * Launch the application.
@@ -93,9 +96,9 @@ public class mainWindow {
 		frmAffichageCamraEt = new JFrame();
 		frmAffichageCamraEt.setTitle("Affichage caméra et retransmission xBee");
 		frmAffichageCamraEt.setResizable(false);
-		frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(5)), Integer.parseInt( lesP.get(6)) );
+			//frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(5)), Integer.parseInt( lesP.get(6)) );
 
-//		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
+		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
 		frmAffichageCamraEt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAffichageCamraEt.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -126,23 +129,37 @@ public class mainWindow {
 		Box verticalBox = Box.createVerticalBox();
 		verticalBox_1.add(verticalBox);
 		verticalBox.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		
+				final JRadioButton rdbtnCamera = new JRadioButton("Camera");
+				verticalBox.add(rdbtnCamera);
 		JRadioButton rdbtnWifiTcp = new JRadioButton("Wifi tcp");
 		verticalBox.add(rdbtnWifiTcp);
 
-		JRadioButton rdbtnXbee = new JRadioButton("Xbee");
-		verticalBox.add(rdbtnXbee);
-
-		final JRadioButton rdbtnCamera = new JRadioButton("Camera");
-		verticalBox.add(rdbtnCamera);
-
-		JRadioButton rdbtnLeapMotion = new JRadioButton("Leap motion");
-		verticalBox.add(rdbtnLeapMotion);
 		
+		
+		
+		//rdbtnWifiTcp.seti
+		//JRadioButton rdbtnLeapMotion = new JRadioButton("Leap motion");
+		//verticalBox.add(rdbtnLeapMotion);
+
 		JLabel lblVoiture = new JLabel("Voiture : ");
 		verticalBox_1.add(lblVoiture);
-		
+
+
+		/*PanelVoiture = new JFrame();
+		PanelVoiture.setTitle("Capteur voiture");
 		final VoiturePanel VoitureP = new VoiturePanel();
-		verticalBox_1.add(VoitureP);
+
+		PanelVoiture.add(VoitureP);
+		PanelVoiture.setVisible(true);
+
+
+
+		PanelVoiture.setBounds(frmAffichageCamraEt.getX()+frmAffichageCamraEt.getHeight()+100,frmAffichageCamraEt.getY()+frmAffichageCamraEt.getWidth()-350, 200, 280);
+		PanelVoiture.setAlwaysOnTop(true);
+		PanelVoiture.setResizable(false);
+		PanelVoiture.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+*/
 
 
 		btnConnect.addMouseListener(new MouseAdapter() {
@@ -174,20 +191,20 @@ public class mainWindow {
 					rdbtnCamera.setSelected(true);
 
 
-				final TcpControlHandler LeapTcp = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
+					final TcpControlHandler LeapTcp = new TcpControlHandler(lesP.get(3),Integer.parseInt( lesP.get(4)));
 					// Envoie des commandes vers le xBee pas encore dans un autre thread a corriger 
-					
-				final TcpControlHandler RaspTcp = new TcpControlHandler(lesP.get(2),Integer.parseInt( lesP.get(7)));
 
-					
+					final TcpControlHandler RaspTcp = new TcpControlHandler(lesP.get(2),Integer.parseInt( lesP.get(7)));
+
+
 					// Lancement du thread TCP
 					(new Thread(LeapTcp)).start();
 					(new Thread(RaspTcp)).start();
-					
-					
+
+
 					/*Renvoie des données vers le Rsp*/
 					TcpControlListener lstLeap = new TcpControlListener(){
-						
+
 
 						public void onReceive(String userInput)
 						{
@@ -195,29 +212,83 @@ public class mainWindow {
 							RaspTcp.send(userInput);
 						}
 
-						
+						@Override
+						public void stats(int stats) {
+							// TODO Auto-generated method stub
+							
+						}
+
+
 					};
-					
+
 					LeapTcp.setOnTcpControlHandlerListener(lstLeap);
 
 					/*Recupération d'informations venant du rasp*/
 					//{"informations":{"distance":30}}
 					TcpControlListener lstRsp = new TcpControlListener(){
-						
+
 
 						public void onReceive(String userInput)
 						{
-							int  idx= userInput.indexOf("}");
-							String valeur = (String) userInput.subSequence(idx-2, idx);
-							VoitureP.changeDistance(valeur);
+
+							//{"informations":{"distance":30}}
+
+							JSONParser parser = new JSONParser();
+							JSONParser parserArr = new JSONParser();
+
+							KeyFinder finderAvant = new KeyFinder();
+							KeyFinder finderArriere = new KeyFinder();
+
+							String avant= "";
+							String arriere = "";
+
+							finderAvant.setMatchKey("distance_avant");
+							try{
+								while(!finderAvant.isEnd()){
+									parser.parse(userInput, finderAvant, true);
+									if(finderAvant.isFound()){
+										finderAvant.setFound(false);
+										System.out.println("found id:");
+										avant =  Long.toString((long) finderAvant.getValue());
+									}
+								}           
+							}
+							catch(ParseException pe){
+								pe.printStackTrace();
+							}
+
+							finderArriere.setMatchKey("distance_arriere");
+							try{
+								while(!finderArriere.isEnd()){
+									parserArr.parse(userInput, finderArriere, true);
+									if(finderArriere.isFound()){
+										finderArriere.setFound(false);
+										System.out.println("found id:");
+										arriere =Long.toString((long) finderArriere.getValue());
+									}
+								}           
+							}
+							catch(ParseException pe){
+								pe.printStackTrace();
+							}
+
+
+						//	VoitureP.changeDistance(avant,arriere);
+
+
+						}
+
+						@Override
+						public void stats(int stats) {
+							// TODO Auto-generated method stub
 							
 						}
 
-						
+
 					};
-					
+
 					RaspTcp.setOnTcpControlHandlerListener(lstRsp);
-					
+
 				}catch(Exception ee){
 					rdbtnCamera.setSelected(false);
 					ee.printStackTrace();

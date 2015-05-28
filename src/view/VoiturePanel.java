@@ -9,6 +9,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+
 
 public class VoiturePanel extends JPanel {
 
@@ -17,7 +20,9 @@ public class VoiturePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BufferedImage image;
-	private String distance= "XXX"; 
+	private String distanceAvant= "XXX"; 
+	private String distanceArriere= "XXX"; 
+
 	public VoiturePanel() {
 		try {
 			image = ImageIO.read(new File("voiture.png"));
@@ -26,20 +31,33 @@ public class VoiturePanel extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	public void changeDistance(String distance)
+	public void changeDistance(String distanceAvant,String distanceArriere)
 	{
-		this.distance = distance;
+		this.distanceAvant = distanceAvant;
+		this.distanceArriere = distanceArriere;
 		this.repaint();
 		
 	}
 	
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(image, 30, 50, null); 
 		
-		System.out.println(distance+"\n");
+		
+		System.out.println(this.getSize().getHeight());
+		System.out.println(this.getSize().getWidth());
+
+		g.drawImage(image,  
+				 (int)Math.round(this.getHeight()*0.2),(int) Math.round(this.getWidth()*0.25), this); 
+		
+
+		
+		System.out.println("Debug avant : "+distanceAvant+"\n");
+		System.out.println("Debug avant : "+distanceArriere+"\n");
+
         g.setColor(Color.red);
-		g.drawString(distance+" cm", 55, 40);
+		g.drawString(distanceAvant+" cm", (int) (this.getSize().getHeight()*0.28), (int) (this.getSize().getHeight()*0.15));
+		
+		g.drawString(distanceArriere+" cm", (int) (this.getSize().getHeight()*0.28), (int) (this.getSize().getHeight()*0.90));
 	}
 
 }

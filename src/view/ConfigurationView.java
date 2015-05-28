@@ -385,8 +385,6 @@ public class ConfigurationView extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-
-
 		List<String> lesOrigins;
 		try {
 			lesOrigins = this.sonCH.getSesparams();
@@ -400,9 +398,6 @@ public class ConfigurationView extends JDialog {
 				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(5))  );
 				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(6))  );
 				this.portRsp.setValue( Integer.parseInt(lesOrigins.get(7))  );
-
-
-
 			}
 
 		} catch (Exception e) {
