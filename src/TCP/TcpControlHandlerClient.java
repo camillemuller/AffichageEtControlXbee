@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class TcpControlHandler implements Runnable {
+public class TcpControlHandlerClient implements Runnable {
 
 	private TcpControlListener sonListenerTcp;
 	private  int    _port;
@@ -36,7 +36,7 @@ public class TcpControlHandler implements Runnable {
 		}	
 	}
 
-	public TcpControlHandler(String ip,int port)
+	public TcpControlHandlerClient(String ip,int port)
 	{
 
 		this.ip = ip ; 
