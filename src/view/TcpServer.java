@@ -75,6 +75,7 @@ class Client extends Thread
 	public void send(String message) {
 		// TODO Auto-generated method stub
 		try {
+			System.out.println("test");
 			outToClient.writeBytes(message);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -88,8 +89,11 @@ class Client extends Thread
 		{    
 			inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-			clientSentence = inFromClient.readLine();
+			
+			while((clientSentence = inFromClient.readLine()) != null)
+			{
 			tcpClient.send(clientSentence);
+			}
 		}
 		catch(IOException e)
 		{

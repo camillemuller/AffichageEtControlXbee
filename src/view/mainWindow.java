@@ -211,6 +211,8 @@ public class mainWindow {
 
 						public void onReceive(String userInput)
 						{
+							
+							System.out.println("User input "+userInput);
 
 							//{"informations":{"distance":30}}
 
