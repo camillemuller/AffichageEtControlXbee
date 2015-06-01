@@ -3,14 +3,14 @@ package view;
 import javax.swing.JFrame;
 
 import Configuration.ConfigurationHandler;
-import TCP.TcpControlHandlerClient;
-import TCP.TcpControlListener;
+import TCPCONTROLER.ClientRaspberryPI;
+import TCPCONTROLER.ClientRaspberryPiListener;
+import TCPCONTROLER.ServerControlHandler;
 
 import com.charliemouse.cambozola.Viewer;
 
 import javax.swing.JLabel;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
@@ -96,9 +96,9 @@ public class mainWindow {
 		frmAffichageCamraEt = new JFrame();
 		frmAffichageCamraEt.setTitle("Affichage caméra et retransmission xBee");
 		frmAffichageCamraEt.setResizable(false);
-		frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(5)), Integer.parseInt( lesP.get(6)) );
+		//frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(4)), Integer.parseInt( lesP.get(5)) );
 
-		//frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
+		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
 		frmAffichageCamraEt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAffichageCamraEt.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -135,22 +135,11 @@ public class mainWindow {
 		JRadioButton rdbtnWifiTcp = new JRadioButton("Wifi tcp");
 		verticalBox.add(rdbtnWifiTcp);
 
-		
-		
-		
-		//rdbtnWifiTcp.seti
-		//JRadioButton rdbtnLeapMotion = new JRadioButton("Leap motion");
-		//verticalBox.add(rdbtnLeapMotion);
-
-	//	JLabel lblVoiture = new JLabel("Voiture : ");
-	//	verticalBox_1.add(lblVoiture);
-
-
 		PanelVoiture = new JFrame();
 		PanelVoiture.setTitle("Capteur voiture");
 		final VoiturePanel VoitureP = new VoiturePanel();
 
-		PanelVoiture.add(VoitureP);
+		PanelVoiture.getContentPane().add(VoitureP);
 		PanelVoiture.setVisible(true);
 
 
@@ -194,10 +183,10 @@ public class mainWindow {
 				//	final TcpControlHandlerClient LeapTcp = new TcpControlHandlerClient(lesP.get(3),));
 					// Envoie des commandes vers le xBee pas encore dans un autre thread a corriger 
 
-					final TcpControlHandlerClient RaspTcp = new TcpControlHandlerClient(lesP.get(2),Integer.parseInt( lesP.get(7)));
+					final ClientRaspberryPI RaspTcp = new ClientRaspberryPI(lesP.get(2),Integer.parseInt( lesP.get(6)));
 
 					
-					final TcpServer ServerControl = new TcpServer(Integer.parseInt( lesP.get(4)),RaspTcp);
+					final ServerControlHandler ServerControl = new ServerControlHandler(Integer.parseInt( lesP.get(3)),RaspTcp);
 					
 					ServerControl.start();
 					// Lancement du thread TCP
@@ -206,7 +195,7 @@ public class mainWindow {
 
 					/*Recupération d'informations venant du rasp*/
 					//{"informations":{"distance":30}}
-					TcpControlListener lstRsp = new TcpControlListener(){
+					ClientRaspberryPiListener lstRsp = new ClientRaspberryPiListener(){
 
 
 						public void onReceive(String userInput)
@@ -296,10 +285,18 @@ public class mainWindow {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				ConfigurationView sonConfigView = new ConfigurationView(pt);
-				sonConfigView.show();
+				changeVisibility(false);
+				sonConfigView.setVisible(true);
 
 			}
 		});
 
+	}
+	
+	public void changeVisibility(boolean visible)
+	{
+	this.frmAffichageCamraEt.setVisible(visible);
+	this.PanelVoiture.setVisible(visible);
+	
 	}
 }

@@ -18,8 +18,8 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ import java.awt.Component;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -55,13 +56,11 @@ public class ConfigurationView extends JDialog {
 	private JLabel lblPort;
 	private ConfigurationHandler sonCH;
 	private JSpinner PortField;
-	private JFormattedTextField adrLeap;
 
 	private JSpinner portLeap;
 	private JSpinner portRsp;
 	private JSpinner varHauteur;
 	private JSpinner varLarger;
-	private JFormattedTextField adrRsp;
 	/*
 	 * LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 -f 29 -r 1280x720" -o "/usr/local/lib/output_http.so -w /usr/local/www -p 8080"
 	 * 
@@ -70,6 +69,10 @@ public class ConfigurationView extends JDialog {
 	private mainWindow saVueP;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTextField ip_part1;
+	private JTextField ip_part2;
+	private JTextField ip_part3;
+	private JTextField ip_part4;
 
 	/**
 	 * Create the dialog.
@@ -77,14 +80,7 @@ public class ConfigurationView extends JDialog {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigurationView(mainWindow mainWindow) {
 
-		MaskFormatter mf = null;
-		try {
-			mf = new MaskFormatter("###.###.###.###");
 
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 		saVueP = mainWindow ;
 		setResizable(false);
@@ -186,24 +182,13 @@ public class ConfigurationView extends JDialog {
 			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		}
 
-		adrRsp = new JFormattedTextField(mf);
-		adrRsp.setBounds(70, 238, 164, 38);
-		panel.add(adrRsp);
-		adrRsp.setMaximumSize(new Dimension(150, 100));
-		adrRsp.setHorizontalAlignment(SwingConstants.CENTER);
-		adrRsp.setColumns(1);
-
-		JLabel label = new JLabel("Adresse : ");
-		label.setBounds(6, 249, 62, 16);
-		panel.add(label);
-
 		portRsp = new JSpinner();
 		portRsp.setMaximumSize(new Dimension(100, 100));
-		portRsp.setBounds(280, 238, 93, 38);
+		portRsp.setBounds(51, 238, 93, 38);
 		panel.add(portRsp);
 
 		JLabel label_2 = new JLabel("Port :");
-		label_2.setBounds(238, 253, 33, 9);
+		label_2.setBounds(6, 253, 33, 9);
 		panel.add(label_2);
 
 		JLabel lblPartieLeapmotion = new JLabel("Partie LeapMotion : ");
@@ -213,24 +198,16 @@ public class ConfigurationView extends JDialog {
 		lblPartieLeapmotion.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPartieLeapmotion.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 
-		adrLeap = new JFormattedTextField(mf);
-		adrLeap.setBounds(70, 332, 164, 38);
-		panel.add(adrLeap);
-		adrLeap.setHorizontalAlignment(SwingConstants.CENTER);
-
-		adrLeap.setColumns(1);
-		adrLeap.setMaximumSize(new Dimension(150,100));
-
 		JLabel lblAdresse = new JLabel("Adresse : ");
 		lblAdresse.setBounds(6, 343, 62, 16);
 		panel.add(lblAdresse);
 
 		JLabel label_1 = new JLabel("Port :");
-		label_1.setBounds(238, 347, 33, 9);
+		label_1.setBounds(283, 347, 33, 9);
 		panel.add(label_1);
 
 		portLeap = new JSpinner();
-		portLeap.setBounds(280, 332, 93, 38);
+		portLeap.setBounds(326, 332, 77, 38);
 		panel.add(portLeap);
 		portLeap.setMaximumSize(new Dimension(100,100));
 
@@ -239,34 +216,74 @@ public class ConfigurationView extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				URL u;
 				try {
+
+					//TODO
 					u = new URL("http://www.example.com/");
-				HttpURLConnection huc = null;
-				huc.setRequestMethod("GET"); 
-				huc.connect() ; 
-				OutputStream os = huc.getOutputStream(); 
-				int code = huc.getResponseCode(); 
-				
-				System.out.println();
-				
+					HttpURLConnection huc = null;
+					huc.setRequestMethod("GET"); 
+					huc.connect() ; 
+					OutputStream os = huc.getOutputStream(); 
+					int code = huc.getResponseCode(); 
+
+					System.out.println(code);
+
 					huc = (HttpURLConnection)u.openConnection();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				 } 
-			
+				} 
+
 
 			}
 		});
-		btnTesterLeLien.setBounds(385, 68, 82, 38);
+		btnTesterLeLien.setBounds(412, 77, 55, 29);
 		panel.add(btnTesterLeLien);
 
-		JButton button = new JButton("Test");
-		button.setBounds(385, 239, 82, 38);
-		panel.add(button);
-
 		JButton button_1 = new JButton("Test");
-		button_1.setBounds(385, 333, 82, 38);
+		button_1.setBounds(415, 342, 52, 29);
 		panel.add(button_1);
+
+		NumberFormat longFormat = NumberFormat.getIntegerInstance();
+
+		NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+
+		numberFormatter.setValueClass(Integer.class);
+		numberFormatter.setMinimum(0); //Optional
+		numberFormatter.setMaximum(255);
+
+
+
+		ip_part1 = new JFormattedTextField(numberFormatter);
+		ip_part1.setBounds(75, 339, 41, 23);
+		panel.add(ip_part1);
+		ip_part1.setColumns(10);
+
+		ip_part2 = new JFormattedTextField(numberFormatter);
+		ip_part2.setColumns(10);
+		ip_part2.setBounds(75+40, 339, 41, 23);
+		panel.add(ip_part2);
+
+		ip_part3 = new JFormattedTextField(numberFormatter);
+		ip_part3.setColumns(10);
+		ip_part3.setBounds(75+40*2, 339, 41, 23);
+		panel.add(ip_part3);
+
+		ip_part4 = new JFormattedTextField(numberFormatter);
+		ip_part4.setColumns(10);
+		ip_part4.setBounds(75+40*3, 339, 41, 23);
+		panel.add(ip_part4);
+
+		JLabel label = new JLabel(".");
+		label.setBounds(114, 345, 9, 16);
+		panel.add(label);
+
+		JLabel label_3 = new JLabel(".");
+		label_3.setBounds(154, 345, 9, 16);
+		panel.add(label_3);
+
+		JLabel label_4 = new JLabel(".");
+		label_4.setBounds(193, 345, 9, 16);
+		panel.add(label_4);
 
 		Box TabRobot = Box.createVerticalBox();
 		tabbedPane.addTab("Configuration Voiture", null, TabRobot, null);
@@ -342,30 +359,27 @@ public class ConfigurationView extends JDialog {
 					public void mouseClicked(MouseEvent e) {
 
 						IPAdressValidator un = new IPAdressValidator();
-						if(!un.validate(adrLeap.getText()))
+							if(!un.validate(ip_part1.getText()+"."+ip_part2.getText()+"."+ip_part3.getText()+"."+ip_part4.getText() ))
 						{
-							JOptionPane.showMessageDialog(null, "Adresse IP non valide LeapMotion", "Adresse IP LeapMotion",JOptionPane.WARNING_MESSAGE);	
+							JOptionPane.showMessageDialog(null, "Adresse IP non valide Raspberry", "Adresse IP Raspberry",JOptionPane.WARNING_MESSAGE);	
 							return;
 						}
 
-						IPAdressValidator un2 = new IPAdressValidator();
-						if(!un2.validate(adrRsp.getText()))
-						{
-							JOptionPane.showMessageDialog(null, "Adresse IP non valide Raspberry Pi", "Adresse IP Raspberry Pi",JOptionPane.WARNING_MESSAGE);	
-							return;
-						}
 
 						List<String> lesParams = new ArrayList<String>();
 						lesParams.add(URLfield.getText());
 						lesParams.add(PortField.getValue().toString());
-						lesParams.add(adrRsp.getText()); // Ancien serial port
-						lesParams.add(adrLeap.getText());
+
+						//TODO
+						lesParams.add(ip_part1.getText()+"."+ip_part2.getText()+"."+ip_part3.getText()+"."+ip_part4.getText()); // Ancien serial port
 						lesParams.add( portLeap.getValue().toString()  );
 						lesParams.add(varHauteur.getValue().toString() ); 
 						lesParams.add(varLarger.getValue().toString());
 						lesParams.add(portRsp.getValue().toString());
 						saVueP.changeP((int)varHauteur.getValue(), (int)varLarger.getValue());
 						sonCH.sauvegarde(lesParams);
+
+						saVueP.changeVisibility(true);
 						dispose();
 					}
 				});
@@ -378,7 +392,9 @@ public class ConfigurationView extends JDialog {
 				cancelButton.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
+						saVueP.changeVisibility(true);
 						dispose();
+
 					}
 				});
 				cancelButton.setActionCommand("Annuler");
@@ -388,16 +404,24 @@ public class ConfigurationView extends JDialog {
 		List<String> lesOrigins;
 		try {
 			lesOrigins = this.sonCH.getSesparams();
-			if(!lesOrigins.isEmpty() && lesOrigins.size() == 8)
+			if(!lesOrigins.isEmpty() && lesOrigins.size() == 7)
 			{
 				this.URLfield.setText(lesOrigins.get(0));
 				this.PortField.setValue( Integer.parseInt(lesOrigins.get(1)) );
-				this.adrRsp.setText (lesOrigins.get(2));
-				this.adrLeap.setText(lesOrigins.get(3));
-				this.portLeap.setValue(Integer.parseInt(lesOrigins.get(4)) );
-				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(5))  );
-				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(6))  );
-				this.portRsp.setValue( Integer.parseInt(lesOrigins.get(7))  );
+				String ip = lesOrigins.get(2);
+				int index1dot =  ip.indexOf(".");
+				this.ip_part1.setText(ip.substring(0,   index1dot   ));
+				int index2dot = ip.indexOf(".",  ip.indexOf(".") +1);
+				this.ip_part2.setText(ip.substring(index1dot,  index2dot    ));
+				int index3dot = ip.indexOf(".",  index2dot +1);
+				this.ip_part3.setText(ip.substring(index2dot,  index3dot    ));
+				
+				this.ip_part4.setText(ip.substring(index3dot,  ip.length()    ));
+				
+				this.portLeap.setValue(Integer.parseInt(lesOrigins.get(3)) );
+				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(4))  );
+				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(5))  );
+				this.portRsp.setValue( Integer.parseInt(lesOrigins.get(6))  );
 			}
 
 		} catch (Exception e) {

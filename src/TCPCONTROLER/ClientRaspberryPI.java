@@ -1,4 +1,4 @@
-package TCP;
+package TCPCONTROLER;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class TcpControlHandlerClient implements Runnable {
+public class ClientRaspberryPI implements Runnable {
 
-	private TcpControlListener sonListenerTcp;
+	private ClientRaspberryPiListener sonListenerTcp;
 	private  int    _port;
 	private  Socket _socket;
 	private String ip;
@@ -18,7 +18,7 @@ public class TcpControlHandlerClient implements Runnable {
 	private InputStream _input;
 	private BufferedReader _response;
 	
-	public void setOnTcpControlHandlerListener(TcpControlListener unListener)
+	public void setOnTcpControlHandlerListener(ClientRaspberryPiListener unListener)
 	{
 		this.sonListenerTcp = unListener;
 
@@ -36,7 +36,7 @@ public class TcpControlHandlerClient implements Runnable {
 		}	
 	}
 
-	public TcpControlHandlerClient(String ip,int port)
+	public ClientRaspberryPI(String ip,int port)
 	{
 
 		this.ip = ip ; 

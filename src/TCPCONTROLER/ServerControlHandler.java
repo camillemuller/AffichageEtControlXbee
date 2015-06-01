@@ -1,4 +1,4 @@
-package view;
+package TCPCONTROLER;
 
 
 import java.io.*;
@@ -6,17 +6,15 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import TCP.TcpControlHandlerClient;
 
-
-class TcpServer  extends Thread
+public class ServerControlHandler  extends Thread
 {
-	private TcpControlHandlerClient tcpClient;
+	private ClientRaspberryPI tcpClient;
 
 	private List<Client> sesClients;
 	private int sonNumeroport;
 
-	public TcpServer( int i, TcpControlHandlerClient tcpClient)
+	public ServerControlHandler( int i, ClientRaspberryPI tcpClient)
 	{
 		this.sonNumeroport =i;
 		this.tcpClient = tcpClient;
@@ -63,10 +61,10 @@ class Client extends Thread
 	private String clientSentence;
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
-	private TcpControlHandlerClient tcpClient;
+	private ClientRaspberryPI tcpClient;
 
 
-	public Client(Socket c, TcpControlHandlerClient tcpClient) throws IOException
+	public Client(Socket c, ClientRaspberryPI tcpClient) throws IOException
 	{
 		connectionSocket = c;
 		this.tcpClient = tcpClient;

@@ -44,27 +44,22 @@ public class ConfigurationHandler {
 		racine.addContent(ADRRSPI);
 
 
-		Element ADRLEAP =  new Element("ADRLEAP");
-		ADRLEAP.setText(sesParams.get(3));
-		racine.addContent(ADRLEAP);
-
-
 		Element PORTLEAP = new Element("PORTLEAP");
-		PORTLEAP.setText(sesParams.get(4));
+		PORTLEAP.setText(sesParams.get(3));
 		racine.addContent(PORTLEAP);
 
 
 		Element VARHAUTEUR = new Element("VARHAUTEUR");
-		VARHAUTEUR.setText(sesParams.get(5));
+		VARHAUTEUR.setText(sesParams.get(4));
 		racine.addContent(VARHAUTEUR);
 
 
 		Element VARLARGEUR = new Element("VARLARGEUR");
-		VARLARGEUR.setText(sesParams.get(6));
+		VARLARGEUR.setText(sesParams.get(5));
 		racine.addContent(VARLARGEUR);
 		
 		Element PORTRSPI = new Element("PORTRSPI");
-		PORTRSPI.setText(sesParams.get(7));
+		PORTRSPI.setText(sesParams.get(6));
 		racine.addContent(PORTRSPI);
 
 
@@ -107,12 +102,8 @@ public class ConfigurationHandler {
 			Element PORT = racine.getChild("PORT");
 			laConfig.add(PORT.getValue());
 
-
 			Element ADRRSPI = racine.getChild("ADRRSPI");
 			laConfig.add(ADRRSPI.getValue());
-
-			Element ADRLEAP = racine.getChild("ADRLEAP");
-			laConfig.add(ADRLEAP.getValue());
 
 			Element PORTLEAP = racine.getChild("PORTLEAP");
 			laConfig.add(PORTLEAP.getValue());
@@ -121,14 +112,11 @@ public class ConfigurationHandler {
 			laConfig.add(VARHAUTEUR.getValue());
 
 			Element VARLARGEUR = racine.getChild("VARLARGEUR");
-			laConfig.add(VARLARGEUR.getValue());
-			
+			laConfig.add(VARLARGEUR.getValue());		
 			
 			Element PORTRSPI = racine.getChild("PORTRSPI");
 			laConfig.add(PORTRSPI.getValue());
-
-			
-			
+	
 			return laConfig;
 
 	
