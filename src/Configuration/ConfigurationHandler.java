@@ -78,8 +78,96 @@ public class ConfigurationHandler {
 
 	}
 
+	
+	
+	
+	public String getUrlCamera()
+	{
+		try {
+			return getSesparams().get(0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return "http://192.168.1.1/?action=stream";
+			
+		}
+	}
+	
+	public int getPortCamera()
+	{
+		try {
+			return  Integer.parseInt(getSesparams().get(1));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 8080;
+			
+		}
+	}
+	
+	public String getIpRasp()
+	{
+		try {
+			return getSesparams().get(2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return "192.168.1.1";
+			
+		}
+	}
+	
+	public int getPortLeap()
+	{
+		try {
+			return Integer.parseInt(getSesparams().get(3));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 5005;
+			
+		}
+	}
+	
+	public int getHauteurCamera()
+	{
+		try {
+			return Integer.parseInt(getSesparams().get(4));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 640;
+			
+		}
+	}
+	
+	public int getLargeurCamera()
+	{
+		try {
+			return Integer.parseInt(getSesparams().get(5));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 460;
+			
+		}
+	}
 
-	public List<String> getSesparams() throws Exception
+	public int getPortRsp()
+	{
+		try {
+			return Integer.parseInt(getSesparams().get(6));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 10200;
+			
+		}
+	}
+	
+	
+	
+	private List<String> getSesparams() throws Exception
 	{
 		List<String> laConfig = new ArrayList<String>();
 

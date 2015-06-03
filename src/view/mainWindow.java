@@ -36,6 +36,7 @@ public class mainWindow {
 	private JFrame frmAffichageCamraEt;
 	private JFrame PanelVoiture;
 	private Viewer leViewer;
+	private ConfigurationHandler saConfig;
 
 	/**
 	 * Launch the application.
@@ -58,6 +59,8 @@ public class mainWindow {
 	 */
 	public mainWindow() {
 		initialize();
+		saConfig = new ConfigurationHandler();
+
 	}
 
 
@@ -76,23 +79,7 @@ public class mainWindow {
 	 */
 	private void initialize() {
 
-		final ConfigurationHandler leCh = new ConfigurationHandler();
-		List<String> lesP =new ArrayList<String>();
-		try {
-			lesP = leCh.getSesparams();
 
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			//Default parameter 
-			lesP.add("http://192.168.1.1/?action=stream");
-			lesP.add("8080");
-			lesP.add("/dev/USB0");
-			lesP.add("192.168.1.1");
-			lesP.add("80");
-			lesP.add("800");
-			lesP.add("600");
-		}
 
 		frmAffichageCamraEt = new JFrame();
 		frmAffichageCamraEt.setTitle("Affichage caméra et retransmission xBee");
@@ -103,9 +90,6 @@ public class mainWindow {
 		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
 		frmAffichageCamraEt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAffichageCamraEt.getContentPane().setLayout(new BorderLayout(0, 0));
-
-
-
 		leViewer = new Viewer();
 		leViewer.setLayout(new GridLayout(1, 0, 0, 0));
 		frmAffichageCamraEt.getContentPane().add(leViewer);
@@ -129,26 +113,26 @@ public class mainWindow {
 		Box verticalBox = Box.createVerticalBox();
 		verticalBox_1.add(verticalBox);
 		verticalBox.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		
-				final JRadioButton rdbtnCamera = new JRadioButton("Camera");
-				verticalBox.add(rdbtnCamera);
+
+		final JRadioButton rdbtnCamera = new JRadioButton("Camera");
+		verticalBox.add(rdbtnCamera);
 		JRadioButton rdbtnWifiTcp = new JRadioButton("Wifi tcp");
 		verticalBox.add(rdbtnWifiTcp);
 
 		btnConnect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-			if(btnConnect.getText() == "CONNECT")
-			{
-				connection();
-				btnConnect.setText("DISCONNECT");
-			}
-			else
-			{
-				disconnect();
-				btnConnect.setText("CONNECT");
-			}
-			//Connection
+				if(btnConnect.getText() == "CONNECT")
+				{
+					connection();
+					btnConnect.setText("DISCONNECT");
+				}
+				else
+				{
+					disconnect();
+					btnConnect.setText("CONNECT");
+				}
+				//Connection
 			}});
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -170,40 +154,21 @@ public class mainWindow {
 		});
 
 	}
-	
+
 	ClientRaspberryPI RaspTcp;
 	ServerControlHandler ServerControl;
-	
+
+
 	public void connection()
 	{
 		// Caméra
-
-
 		try{
-			final ConfigurationHandler leCh = new ConfigurationHandler();
-			List<String> lesP =new ArrayList<String>();
-			try {
-				lesP = leCh.getSesparams();
 
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				//Default parameter 
-				lesP.add("http://192.168.1.1/?action=stream");
-				lesP.add("8080");
-				lesP.add("/dev/USB0");
-				lesP.add("192.168.1.1");
-				lesP.add("80");
-				lesP.add("800");
-				lesP.add("600");
-			}
-
-			String[] lesParams = {lesP.get(0),lesP.get(1)};
+			String[] lesParams = {saConfig.getUrlCamera(),Integer.toString( saConfig.getPortCamera())};
 			leViewer.test(lesParams, leViewer);
-
-			 RaspTcp = new ClientRaspberryPI(lesP.get(2),Integer.parseInt( lesP.get(6)));					
-		ServerControl = new ServerControlHandler(Integer.parseInt( lesP.get(3)),RaspTcp);
-			
+			RaspTcp = new ClientRaspberryPI(saConfig.getIpRasp(),saConfig.getPortRsp());					
+			ServerControl = new ServerControlHandler(saConfig.getPortLeap(),RaspTcp);
+			//Lancement du serveur TCP (Contrôle du robot)
 			ServerControl.start();
 			// Lancement du thread TCP
 			(new Thread(RaspTcp)).start();
@@ -212,11 +177,9 @@ public class mainWindow {
 			//{"informations":{"distance":30}}
 			ClientRaspberryPiListener lstRsp = new ClientRaspberryPiListener(){
 
-			
-
 				public void onReceive(String userInput)
 				{
-					
+
 					System.out.println("User input "+userInput);
 
 					//{"informations":{"distance":30}}
@@ -258,7 +221,7 @@ public class mainWindow {
 					catch(ParseException pe){
 						pe.printStackTrace();
 					}
-				VoitureP.changeDistance(avant,arriere);
+					VoitureP.changeDistance(avant,arriere);
 
 
 				}
@@ -266,7 +229,7 @@ public class mainWindow {
 				@Override
 				public void stats(int stats) {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 
@@ -280,29 +243,30 @@ public class mainWindow {
 		//Debug affichage cam
 
 	}
-	
+
 	public void disconnect()
 	{
-	
-	this.PanelVoiture.dispose();
-	try
-	{
-	RaspTcp.close();
-	}catch(Exception e)
-	{
-		System.out.println("Connection raspberry supprimer");
-	}
-	
-	try
-	{
-	ServerControl.stop();
-	
-	}catch(Exception e)
-	{
+
+		this.PanelVoiture.dispose();
+		try
+		{
 		
+			RaspTcp.arret();
+		}catch(Exception e)
+		{
+			System.out.println("Connection raspberry supprimer");
+		}
+
+		try
+		{
+			ServerControl.arret();
+
+		}catch(Exception e)
+		{
+
+		}
 	}
-	}
-	
+
 	public VoiturePanel afficheVoiture()
 	{
 		PanelVoiture = new JFrame();
@@ -316,12 +280,13 @@ public class mainWindow {
 		PanelVoiture.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		return VoitureP;
 	}
-	
 
-	
+
+
 	public void changeVisibility(boolean visible)
 	{
-	this.frmAffichageCamraEt.setVisible(visible);
-	this.PanelVoiture.setVisible(visible);
+		this.frmAffichageCamraEt.setVisible(visible);
+	if(this.PanelVoiture != null)	
+		this.PanelVoiture.setVisible(visible);
 	}
 }

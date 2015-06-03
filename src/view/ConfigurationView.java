@@ -51,36 +51,34 @@ import java.awt.event.ActionEvent;
 public class ConfigurationView extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField URLfield;
+	private JTextField UrlCamera;
 	private JLabel lblLienDuServer;
 	private JLabel lblPort;
 	private ConfigurationHandler sonCH;
-	private JSpinner PortField;
+	private JSpinner PortCamera;
 
-	private JSpinner portLeap;
-	private JSpinner portRsp;
+	private JSpinner varPortLeap;
+	private JSpinner varPortRasp;
 	private JSpinner varHauteur;
-	private JSpinner varLarger;
+	private JSpinner VarLargeur;
 	/*
 	 * LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 -f 29 -r 1280x720" -o "/usr/local/lib/output_http.so -w /usr/local/www -p 8080"
 	 * 
 	 */
 
 	private mainWindow saVueP;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField ip_part1;
-	private JTextField ip_part2;
-	private JTextField ip_part3;
-	private JTextField ip_part4;
+	private JTextField varVitesseMax;
+	private JTextField varDistanceArret;
+	private JTextField varIpPart1;
+	private JTextField varIpPart2;
+	private JTextField varIpPart3;
+	private JTextField varIpPart4;
 
 	/**
 	 * Create the dialog.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigurationView(mainWindow mainWindow) {
-
-
 
 		saVueP = mainWindow ;
 		setResizable(false);
@@ -120,19 +118,19 @@ public class ConfigurationView extends JDialog {
 			lblPartieCamra.setFont(lblPartieCamra.getFont().deriveFont(lblPartieCamra.getFont().getStyle() | Font.BOLD));
 		}
 		{
-			URLfield = new JTextField();
-			URLfield.setToolTipText("http://....");
-			URLfield.setBounds(118, 18, 349, 38);
-			panel.add(URLfield);
-			URLfield.setColumns(10);
-			URLfield.setMaximumSize(new Dimension(400,100));
+			UrlCamera = new JTextField();
+			UrlCamera.setToolTipText("http://....");
+			UrlCamera.setBounds(118, 18, 349, 38);
+			panel.add(UrlCamera);
+			UrlCamera.setColumns(10);
+			UrlCamera.setMaximumSize(new Dimension(400,100));
 
 		}
 		{
-			PortField = new JSpinner();
-			PortField.setBounds(118, 68, 94, 38);
-			panel.add(PortField);
-			PortField.setMaximumSize(new Dimension(100,100));
+			PortCamera = new JSpinner();
+			PortCamera.setBounds(118, 68, 94, 38);
+			panel.add(PortCamera);
+			PortCamera.setMaximumSize(new Dimension(100,100));
 
 		}
 		{
@@ -163,10 +161,10 @@ public class ConfigurationView extends JDialog {
 		lblLargeur.setBounds(298, 164, 63, 16);
 		panel.add(lblLargeur);
 
-		varLarger = new JSpinner();
-		varLarger.setBounds(373, 147, 82, 50);
-		panel.add(varLarger);
-		varLarger.setMaximumSize(new Dimension(100,50));
+		VarLargeur = new JSpinner();
+		VarLargeur.setBounds(373, 147, 82, 50);
+		panel.add(VarLargeur);
+		VarLargeur.setMaximumSize(new Dimension(100,50));
 
 		JLabel lblRsolutionCamra = new JLabel("Résolution caméra : ");
 		lblRsolutionCamra.setFont(new Font("Lucida Grande", Font.ITALIC, 13));
@@ -175,24 +173,24 @@ public class ConfigurationView extends JDialog {
 		lblRsolutionCamra.setAlignmentX(Component.CENTER_ALIGNMENT);
 		{
 			JLabel lblPartieContrle = new JLabel("Partie contrôle ( Raspberry ) :");
-			lblPartieContrle.setBounds(6, 210, 197, 16);
+			lblPartieContrle.setBounds(5, 305, 197, 16);
 			panel.add(lblPartieContrle);
 			lblPartieContrle.setAlignmentX(Component.LEFT_ALIGNMENT);
 			lblPartieContrle.setAlignmentX(Component.LEFT_ALIGNMENT);
 			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		}
 
-		portRsp = new JSpinner();
-		portRsp.setMaximumSize(new Dimension(100, 100));
-		portRsp.setBounds(51, 238, 93, 38);
-		panel.add(portRsp);
+		varPortRasp = new JSpinner();
+		varPortRasp.setMaximumSize(new Dimension(100, 100));
+		varPortRasp.setBounds(51, 238, 93, 38);
+		panel.add(varPortRasp);
 
 		JLabel label_2 = new JLabel("Port :");
 		label_2.setBounds(6, 253, 33, 9);
 		panel.add(label_2);
 
 		JLabel lblPartieLeapmotion = new JLabel("Partie LeapMotion : ");
-		lblPartieLeapmotion.setBounds(5, 307, 133, 16);
+		lblPartieLeapmotion.setBounds(5, 213, 133, 16);
 		panel.add(lblPartieLeapmotion);
 		lblPartieLeapmotion.setAlignmentX(Component.LEFT_ALIGNMENT);
 		lblPartieLeapmotion.setHorizontalAlignment(SwingConstants.LEFT);
@@ -206,10 +204,10 @@ public class ConfigurationView extends JDialog {
 		label_1.setBounds(283, 347, 33, 9);
 		panel.add(label_1);
 
-		portLeap = new JSpinner();
-		portLeap.setBounds(326, 332, 77, 38);
-		panel.add(portLeap);
-		portLeap.setMaximumSize(new Dimension(100,100));
+		varPortLeap = new JSpinner();
+		varPortLeap.setBounds(326, 332, 77, 38);
+		panel.add(varPortLeap);
+		varPortLeap.setMaximumSize(new Dimension(100,100));
 
 		JButton btnTesterLeLien = new JButton("Test");
 		btnTesterLeLien.addActionListener(new ActionListener() {
@@ -253,25 +251,25 @@ public class ConfigurationView extends JDialog {
 
 
 
-		ip_part1 = new JFormattedTextField(numberFormatter);
-		ip_part1.setBounds(75, 339, 41, 23);
-		panel.add(ip_part1);
-		ip_part1.setColumns(10);
+		varIpPart1 = new JFormattedTextField(numberFormatter);
+		varIpPart1.setBounds(75, 339, 41, 23);
+		panel.add(varIpPart1);
+		varIpPart1.setColumns(10);
 
-		ip_part2 = new JFormattedTextField(numberFormatter);
-		ip_part2.setColumns(10);
-		ip_part2.setBounds(75+40, 339, 41, 23);
-		panel.add(ip_part2);
+		varIpPart2 = new JFormattedTextField(numberFormatter);
+		varIpPart2.setColumns(10);
+		varIpPart2.setBounds(75+40, 339, 41, 23);
+		panel.add(varIpPart2);
 
-		ip_part3 = new JFormattedTextField(numberFormatter);
-		ip_part3.setColumns(10);
-		ip_part3.setBounds(75+40*2, 339, 41, 23);
-		panel.add(ip_part3);
+		varIpPart3 = new JFormattedTextField(numberFormatter);
+		varIpPart3.setColumns(10);
+		varIpPart3.setBounds(75+40*2, 339, 41, 23);
+		panel.add(varIpPart3);
 
-		ip_part4 = new JFormattedTextField(numberFormatter);
-		ip_part4.setColumns(10);
-		ip_part4.setBounds(75+40*3, 339, 41, 23);
-		panel.add(ip_part4);
+		varIpPart4 = new JFormattedTextField(numberFormatter);
+		varIpPart4.setColumns(10);
+		varIpPart4.setBounds(75+40*3, 339, 41, 23);
+		panel.add(varIpPart4);
 
 		JLabel label = new JLabel(".");
 		label.setBounds(114, 345, 9, 16);
@@ -300,15 +298,15 @@ public class ConfigurationView extends JDialog {
 		lblDistanceDarrt.setBounds(35, 231, 154, 16);
 		TabComIhm.add(lblDistanceDarrt);
 
-		textField = new JTextField();
-		textField.setBounds(201, 127, 134, 28);
-		TabComIhm.add(textField);
-		textField.setColumns(10);
+		varVitesseMax = new JTextField();
+		varVitesseMax.setBounds(201, 127, 134, 28);
+		TabComIhm.add(varVitesseMax);
+		varVitesseMax.setColumns(10);
 
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(201, 225, 134, 28);
-		TabComIhm.add(textField_1);
+		varDistanceArret = new JTextField();
+		varDistanceArret.setColumns(10);
+		varDistanceArret.setBounds(201, 225, 134, 28);
+		TabComIhm.add(varDistanceArret);
 
 		varHauteur.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -322,7 +320,7 @@ public class ConfigurationView extends JDialog {
 
 					lon = lon*(float)(3.0/4.0);
 
-					varLarger.setValue(Math.round( lon)  );
+					VarLargeur.setValue(Math.round( lon)  );
 
 					break;
 				}
@@ -332,7 +330,7 @@ public class ConfigurationView extends JDialog {
 
 					lon = lon*(float)(9.0/16.0);
 
-					varLarger.setValue(Math.round( lon)  );
+					VarLargeur.setValue(Math.round( lon)  );
 					break;
 				}
 				case "16/10":
@@ -341,7 +339,7 @@ public class ConfigurationView extends JDialog {
 
 					lon = lon*(float)(10.0/16.0);
 
-					varLarger.setValue(Math.round( lon)  );
+					VarLargeur.setValue(Math.round( lon)  );
 					break;
 				}
 				}
@@ -359,7 +357,7 @@ public class ConfigurationView extends JDialog {
 					public void mouseClicked(MouseEvent e) {
 
 						IPAdressValidator un = new IPAdressValidator();
-							if(!un.validate(ip_part1.getText()+"."+ip_part2.getText()+"."+ip_part3.getText()+"."+ip_part4.getText() ))
+							if(!un.validate(varIpPart1.getText()+"."+varIpPart2.getText()+"."+varIpPart3.getText()+"."+varIpPart4.getText() ))
 						{
 							JOptionPane.showMessageDialog(null, "Adresse IP non valide Raspberry", "Adresse IP Raspberry",JOptionPane.WARNING_MESSAGE);	
 							return;
@@ -367,16 +365,16 @@ public class ConfigurationView extends JDialog {
 
 
 						List<String> lesParams = new ArrayList<String>();
-						lesParams.add(URLfield.getText());
-						lesParams.add(PortField.getValue().toString());
+						lesParams.add(UrlCamera.getText());
+						lesParams.add(PortCamera.getValue().toString());
 
 						//TODO
-						lesParams.add(ip_part1.getText()+"."+ip_part2.getText()+"."+ip_part3.getText()+"."+ip_part4.getText()); // Ancien serial port
-						lesParams.add( portLeap.getValue().toString()  );
+						lesParams.add(varIpPart1.getText()+"."+varIpPart2.getText()+"."+varIpPart3.getText()+"."+varIpPart4.getText()); // Ancien serial port
+						lesParams.add( varPortLeap.getValue().toString()  );
 						lesParams.add(varHauteur.getValue().toString() ); 
-						lesParams.add(varLarger.getValue().toString());
-						lesParams.add(portRsp.getValue().toString());
-						saVueP.changeP((int)varHauteur.getValue(), (int)varLarger.getValue());
+						lesParams.add(VarLargeur.getValue().toString());
+						lesParams.add(varPortRasp.getValue().toString());
+						saVueP.changeP((int)varHauteur.getValue(), (int)VarLargeur.getValue());
 						sonCH.sauvegarde(lesParams);
 
 						saVueP.changeVisibility(true);
@@ -401,35 +399,19 @@ public class ConfigurationView extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		List<String> lesOrigins;
-		try {
-			lesOrigins = this.sonCH.getSesparams();
-			if(!lesOrigins.isEmpty() && lesOrigins.size() == 7)
-			{
-				this.URLfield.setText(lesOrigins.get(0));
-				this.PortField.setValue( Integer.parseInt(lesOrigins.get(1)) );
-				String ip = lesOrigins.get(2);
+				this.UrlCamera.setText(this.sonCH.getUrlCamera());
+				this.PortCamera.setValue( this.sonCH.getPortCamera());
+				String ip = this.sonCH.getIpRasp();
 				int index1dot =  ip.indexOf(".");
-				this.ip_part1.setText(ip.substring(0,   index1dot   ));
+				this.varIpPart1.setText(ip.substring(0,   index1dot   ));
 				int index2dot = ip.indexOf(".",  ip.indexOf(".") +1);
-				this.ip_part2.setText(ip.substring(index1dot+1,  index2dot    ));
+				this.varIpPart2.setText(ip.substring(index1dot+1,  index2dot    ));
 				int index3dot = ip.indexOf(".",  index2dot +1);
-				this.ip_part3.setText(ip.substring(index2dot+1,  index3dot    ));
-				
-				this.ip_part4.setText(ip.substring(index3dot+1,  ip.length()    ));
-				
-				this.portLeap.setValue(Integer.parseInt(lesOrigins.get(3)) );
-				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(4))  );
-				this.varLarger.setValue( Integer.parseInt(lesOrigins.get(5))  );
-				this.portRsp.setValue( Integer.parseInt(lesOrigins.get(6))  );
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-
+				this.varIpPart3.setText(ip.substring(index2dot+1,  index3dot    ));
+				this.varIpPart4.setText(ip.substring(index3dot+1,  ip.length()    ));
+				this.varPortLeap.setValue(this.sonCH.getPortLeap() );
+				this.varHauteur.setValue( this.sonCH.getHauteurCamera()  );
+				this.VarLargeur.setValue( this.sonCH.getLargeurCamera()  );
+				this.varPortRasp.setValue( this.sonCH.getPortRsp()  );
 	}
 }

@@ -26,7 +26,7 @@ public class ServerControlHandler  extends Thread
 	{
 		for(Client unClient : this.sesClients)
 		{
-			unClient.send(message);
+			unClient.send(message+'\n');
 		}
 	}
 
@@ -34,6 +34,7 @@ public class ServerControlHandler  extends Thread
 	public void run()
 	{
 
+		System.out.println("Lanchement serveur TCP ");
 		try{
 			ServerSocket welcomeSocket = new ServerSocket(sonNumeroport);
 
@@ -43,6 +44,7 @@ public class ServerControlHandler  extends Thread
 				if (connectionSocket != null)
 				{
 					Client client = new Client(connectionSocket,tcpClient);
+					System.out.println("nouveau client");
 					sesClients.add(client);
 					client.start();
 				}
@@ -52,6 +54,19 @@ public class ServerControlHandler  extends Thread
 			e.printStackTrace();
 		
 		}
+	}
+
+
+	public void arret() {
+		// TODO Auto-generated method stub
+		
+		System.out.println("start");
+		for(Client unClient : this.sesClients)
+		{
+			unClient.stop();
+		}
+		this.stop();
+		System.out.println("end");
 	}
 }
 

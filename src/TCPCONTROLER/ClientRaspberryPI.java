@@ -114,6 +114,11 @@ public class ClientRaspberryPI implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+	public void arret() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
