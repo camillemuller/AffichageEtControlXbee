@@ -35,6 +35,7 @@ public class mainWindow {
 
 	private JFrame frmAffichageCamraEt;
 	private JFrame PanelVoiture;
+	private Viewer leViewer;
 
 	/**
 	 * Launch the application.
@@ -98,13 +99,14 @@ public class mainWindow {
 		frmAffichageCamraEt.setResizable(false);
 		//frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(4)), Integer.parseInt( lesP.get(5)) );
 
+		//Debug
 		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
 		frmAffichageCamraEt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAffichageCamraEt.getContentPane().setLayout(new BorderLayout(0, 0));
 
 
 
-		final Viewer leViewer = new Viewer();
+		leViewer = new Viewer();
 		leViewer.setLayout(new GridLayout(1, 0, 0, 0));
 		frmAffichageCamraEt.getContentPane().add(leViewer);
 
@@ -120,8 +122,6 @@ public class mainWindow {
 		final JButton btnConnect = new JButton("CONNECT");
 		verticalBox_1.add(btnConnect);
 
-
-
 		JLabel lblEtat = new JLabel("Etat :");
 		verticalBox_1.add(lblEtat);
 
@@ -135,143 +135,21 @@ public class mainWindow {
 		JRadioButton rdbtnWifiTcp = new JRadioButton("Wifi tcp");
 		verticalBox.add(rdbtnWifiTcp);
 
-		PanelVoiture = new JFrame();
-		PanelVoiture.setTitle("Capteur voiture");
-		final VoiturePanel VoitureP = new VoiturePanel();
-
-		PanelVoiture.getContentPane().add(VoitureP);
-		PanelVoiture.setVisible(true);
-
-
-
-		PanelVoiture.setBounds(frmAffichageCamraEt.getX()+frmAffichageCamraEt.getHeight()+100,frmAffichageCamraEt.getY()+frmAffichageCamraEt.getWidth()-350, 200, 280);
-		PanelVoiture.setAlwaysOnTop(true);
-		PanelVoiture.setResizable(false);
-		PanelVoiture.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-
-
 		btnConnect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// Caméra
-
-
-				try{
-					List<String> lesP =null;
-					try {
-						lesP = leCh.getSesparams();
-
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						//Default parameter 
-						lesP.add("http://192.168.1.1/?action=stream");
-						lesP.add("8080");
-						lesP.add("/dev/USB0");
-						lesP.add("192.168.1.1");
-						lesP.add("80");
-						lesP.add("800");
-						lesP.add("600");
-					}
-
-					String[] lesParams = {lesP.get(0),lesP.get(1)};
-					leViewer.test(lesParams, leViewer);
-					rdbtnCamera.setSelected(true);
-
-
-				//	final TcpControlHandlerClient LeapTcp = new TcpControlHandlerClient(lesP.get(3),));
-					// Envoie des commandes vers le xBee pas encore dans un autre thread a corriger 
-
-					final ClientRaspberryPI RaspTcp = new ClientRaspberryPI(lesP.get(2),Integer.parseInt( lesP.get(6)));
-
-					
-					final ServerControlHandler ServerControl = new ServerControlHandler(Integer.parseInt( lesP.get(3)),RaspTcp);
-					
-					ServerControl.start();
-					// Lancement du thread TCP
-					(new Thread(RaspTcp)).start();
-
-
-					/*Recupération d'informations venant du rasp*/
-					//{"informations":{"distance":30}}
-					ClientRaspberryPiListener lstRsp = new ClientRaspberryPiListener(){
-
-
-						public void onReceive(String userInput)
-						{
-							
-							System.out.println("User input "+userInput);
-
-							//{"informations":{"distance":30}}
-
-							JSONParser parser = new JSONParser();
-							JSONParser parserArr = new JSONParser();
-
-							KeyFinder finderAvant = new KeyFinder();
-							KeyFinder finderArriere = new KeyFinder();
-
-							String avant= "";
-							String arriere = "";
-
-							finderAvant.setMatchKey("distance_avant");
-							try{
-								while(!finderAvant.isEnd()){
-									parser.parse(userInput, finderAvant, true);
-									if(finderAvant.isFound()){
-										finderAvant.setFound(false);
-										System.out.println("found id:");
-										avant =  Long.toString((long) finderAvant.getValue());
-									}
-								}           
-							}
-							catch(ParseException pe){
-								pe.printStackTrace();
-							}
-
-							finderArriere.setMatchKey("distance_arriere");
-							try{
-								while(!finderArriere.isEnd()){
-									parserArr.parse(userInput, finderArriere, true);
-									if(finderArriere.isFound()){
-										finderArriere.setFound(false);
-										System.out.println("found id:");
-										arriere =Long.toString((long) finderArriere.getValue());
-									}
-								}           
-							}
-							catch(ParseException pe){
-								pe.printStackTrace();
-							}
-
-
-						//	VoitureP.changeDistance(avant,arriere);
-
-
-						}
-
-						@Override
-						public void stats(int stats) {
-							// TODO Auto-generated method stub
-							
-						}
-
-
-					};
-
-					RaspTcp.setOnTcpControlHandlerListener(lstRsp);
-
-				}catch(Exception ee){
-					rdbtnCamera.setSelected(false);
-					ee.printStackTrace();
-				}
-				//Debug affichage cam
-
-
-				btnConnect.setEnabled(false);
-
+			if(btnConnect.getText() == "CONNECT")
+			{
+				connection();
+				btnConnect.setText("DISCONNECT");
 			}
-		});
+			else
+			{
+				disconnect();
+				btnConnect.setText("CONNECT");
+			}
+			//Connection
+			}});
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -293,10 +171,157 @@ public class mainWindow {
 
 	}
 	
+	ClientRaspberryPI RaspTcp;
+	ServerControlHandler ServerControl;
+	
+	public void connection()
+	{
+		// Caméra
+
+
+		try{
+			final ConfigurationHandler leCh = new ConfigurationHandler();
+			List<String> lesP =new ArrayList<String>();
+			try {
+				lesP = leCh.getSesparams();
+
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				//Default parameter 
+				lesP.add("http://192.168.1.1/?action=stream");
+				lesP.add("8080");
+				lesP.add("/dev/USB0");
+				lesP.add("192.168.1.1");
+				lesP.add("80");
+				lesP.add("800");
+				lesP.add("600");
+			}
+
+			String[] lesParams = {lesP.get(0),lesP.get(1)};
+			leViewer.test(lesParams, leViewer);
+
+			 RaspTcp = new ClientRaspberryPI(lesP.get(2),Integer.parseInt( lesP.get(6)));					
+		ServerControl = new ServerControlHandler(Integer.parseInt( lesP.get(3)),RaspTcp);
+			
+			ServerControl.start();
+			// Lancement du thread TCP
+			(new Thread(RaspTcp)).start();
+			final VoiturePanel VoitureP = afficheVoiture();
+			/*Recupération d'informations venant du rasp*/
+			//{"informations":{"distance":30}}
+			ClientRaspberryPiListener lstRsp = new ClientRaspberryPiListener(){
+
+			
+
+				public void onReceive(String userInput)
+				{
+					
+					System.out.println("User input "+userInput);
+
+					//{"informations":{"distance":30}}
+
+					JSONParser parser = new JSONParser();
+					JSONParser parserArr = new JSONParser();
+
+					KeyFinder finderAvant = new KeyFinder();
+					KeyFinder finderArriere = new KeyFinder();
+
+					String avant= "";
+					String arriere = "";
+
+					finderAvant.setMatchKey("distance_avant");
+					try{
+						while(!finderAvant.isEnd()){
+							parser.parse(userInput, finderAvant, true);
+							if(finderAvant.isFound()){
+								finderAvant.setFound(false);
+								System.out.println("found id:");
+								avant =  Long.toString((long) finderAvant.getValue());
+							}
+						}           
+					}
+					catch(ParseException pe){
+						pe.printStackTrace();
+					}
+					finderArriere.setMatchKey("distance_arriere");
+					try{
+						while(!finderArriere.isEnd()){
+							parserArr.parse(userInput, finderArriere, true);
+							if(finderArriere.isFound()){
+								finderArriere.setFound(false);
+								System.out.println("found id:");
+								arriere =Long.toString((long) finderArriere.getValue());
+							}
+						}           
+					}
+					catch(ParseException pe){
+						pe.printStackTrace();
+					}
+				VoitureP.changeDistance(avant,arriere);
+
+
+				}
+
+				@Override
+				public void stats(int stats) {
+					// TODO Auto-generated method stub
+					
+				}
+
+
+			};
+
+			RaspTcp.setOnTcpControlHandlerListener(lstRsp);
+
+		}catch(Exception ee){
+			ee.printStackTrace();
+		}
+		//Debug affichage cam
+
+	}
+	
+	public void disconnect()
+	{
+	
+	this.PanelVoiture.dispose();
+	try
+	{
+	RaspTcp.close();
+	}catch(Exception e)
+	{
+		System.out.println("Connection raspberry supprimer");
+	}
+	
+	try
+	{
+	ServerControl.stop();
+	
+	}catch(Exception e)
+	{
+		
+	}
+	}
+	
+	public VoiturePanel afficheVoiture()
+	{
+		PanelVoiture = new JFrame();
+		PanelVoiture.setTitle("Capteur voiture");
+		final VoiturePanel VoitureP = new VoiturePanel();
+		PanelVoiture.getContentPane().add(VoitureP);
+		PanelVoiture.setVisible(true);
+		PanelVoiture.setBounds(frmAffichageCamraEt.getX()+frmAffichageCamraEt.getHeight()+100,frmAffichageCamraEt.getY()+frmAffichageCamraEt.getWidth()-350, 200, 280);
+		PanelVoiture.setAlwaysOnTop(true);
+		PanelVoiture.setResizable(false);
+		PanelVoiture.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		return VoitureP;
+	}
+	
+
+	
 	public void changeVisibility(boolean visible)
 	{
 	this.frmAffichageCamraEt.setVisible(visible);
 	this.PanelVoiture.setVisible(visible);
-	
 	}
 }

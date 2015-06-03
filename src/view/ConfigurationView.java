@@ -292,7 +292,7 @@ public class ConfigurationView extends JDialog {
 		TabRobot.add(TabComIhm);
 		TabComIhm.setLayout(null);
 
-		JLabel lblVitesseMaximal = new JLabel("Vitesse maximal (m) : ");
+		JLabel lblVitesseMaximal = new JLabel("Vitesse maximal (%) : ");
 		lblVitesseMaximal.setBounds(35, 133, 154, 16);
 		TabComIhm.add(lblVitesseMaximal);
 
@@ -412,11 +412,11 @@ public class ConfigurationView extends JDialog {
 				int index1dot =  ip.indexOf(".");
 				this.ip_part1.setText(ip.substring(0,   index1dot   ));
 				int index2dot = ip.indexOf(".",  ip.indexOf(".") +1);
-				this.ip_part2.setText(ip.substring(index1dot,  index2dot    ));
+				this.ip_part2.setText(ip.substring(index1dot+1,  index2dot    ));
 				int index3dot = ip.indexOf(".",  index2dot +1);
-				this.ip_part3.setText(ip.substring(index2dot,  index3dot    ));
+				this.ip_part3.setText(ip.substring(index2dot+1,  index3dot    ));
 				
-				this.ip_part4.setText(ip.substring(index3dot,  ip.length()    ));
+				this.ip_part4.setText(ip.substring(index3dot+1,  ip.length()    ));
 				
 				this.portLeap.setValue(Integer.parseInt(lesOrigins.get(3)) );
 				this.varHauteur.setValue( Integer.parseInt(lesOrigins.get(4))  );
