@@ -37,14 +37,13 @@ public class ServerControlHandler  extends Thread
 		System.out.println("Lanchement serveur TCP ");
 		try{
 			ServerSocket welcomeSocket = new ServerSocket(sonNumeroport);
-
+			
 			while(true)
 			{
 				Socket connectionSocket = welcomeSocket.accept();
 				if (connectionSocket != null)
 				{
 					Client client = new Client(connectionSocket,tcpClient);
-					System.out.println("nouveau client");
 					sesClients.add(client);
 					client.start();
 				}
@@ -81,8 +80,10 @@ class Client extends Thread
 
 	public Client(Socket c, ClientRaspberryPI tcpClient) throws IOException
 	{
+		c.setTcpNoDelay(true);
 		connectionSocket = c;
 		this.tcpClient = tcpClient;
+		
 	}
 
 	public void send(String message) {
