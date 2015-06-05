@@ -13,12 +13,28 @@ public class ServerControlHandler  extends Thread
 
 	private List<Client> sesClients;
 	private int sonNumeroport;
+	private ServerSocket welcomeSocket;
 
 	public ServerControlHandler( int i, ClientRaspberryPI tcpClient)
 	{
 		this.sonNumeroport =i;
 		this.tcpClient = tcpClient;
 		this.sesClients = new ArrayList<Client>();
+		
+		welcomeSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+		      @Override
+		      public void call(Object... args) {
+		        socket.emit("test", "awesome");
+
+		      }
+
+		    }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+		      @Override
+		      public void call(Object... args) {}
+
+		    });
 	}
 
 
@@ -31,12 +47,13 @@ public class ServerControlHandler  extends Thread
 	}
 
 
+	@SuppressWarnings("resource")
 	public void run()
 	{
 
 		System.out.println("Lanchement serveur TCP ");
 		try{
-			ServerSocket welcomeSocket = new ServerSocket(sonNumeroport);
+			welcomeSocket = new ServerSocket(sonNumeroport);
 			
 			while(true)
 			{
@@ -61,11 +78,21 @@ public class ServerControlHandler  extends Thread
 		
 		System.out.println("start");
 		for(Client unClient : this.sesClients)
-		{
+		{			
+			unClient.arret();
 			unClient.stop();
 		}
 		this.stop();
 		System.out.println("end");
+		
+		try {
+			welcomeSocket.close();
+			;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
 
@@ -76,11 +103,26 @@ class Client extends Thread
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
 	private ClientRaspberryPI tcpClient;
+	
+	public void arret()
+	{
+		
+		try {
+			this.outToClient.close();
+			this.inFromClient.close();
+			this.connectionSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 
 	public Client(Socket c, ClientRaspberryPI tcpClient) throws IOException
 	{
 		c.setTcpNoDelay(true);
+		c.setPerformancePreferences(MAX_PRIORITY, MAX_PRIORITY, MAX_PRIORITY);
 		connectionSocket = c;
 		this.tcpClient = tcpClient;
 		

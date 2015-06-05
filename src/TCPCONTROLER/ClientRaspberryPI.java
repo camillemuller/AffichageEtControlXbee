@@ -66,6 +66,7 @@ public class ClientRaspberryPI implements Runnable {
 		try {
 			_socket = new Socket(this.ip, this._port);
 			this._socket.setTcpNoDelay(true);
+			this._socket.setPerformancePreferences(10, 10,10);
 			_output = new PrintWriter( _socket.getOutputStream());
 			_input = _socket.getInputStream();
 		} catch (IOException e) {
