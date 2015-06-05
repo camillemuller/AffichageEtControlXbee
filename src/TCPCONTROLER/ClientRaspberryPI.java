@@ -8,16 +8,18 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import Configuration.ConfigurationHandler;
+
 public class ClientRaspberryPI implements Runnable {
 
 	private ClientRaspberryPiListener sonListenerTcp;
-	private  int    _port;
 	private  Socket _socket;
-	private String ip;
 	private PrintWriter _output;
 	private InputStream _input;
 	private BufferedReader _response;
-	
+	private ConfigurationHandler saConfig;
+
+
 	public void setOnTcpControlHandlerListener(ClientRaspberryPiListener unListener)
 	{
 		this.sonListenerTcp = unListener;
@@ -36,17 +38,15 @@ public class ClientRaspberryPI implements Runnable {
 		}	
 	}
 
-	public ClientRaspberryPI(String ip,int port)
+	public ClientRaspberryPI(ConfigurationHandler saConfig)
 	{
-
-		this.ip = ip ; 
-		this._port = port;
+		this.saConfig = saConfig;
 	}
 
 
 	public void send(String a)
 	{
-	
+
 		if(_socket == null)
 		{
 			this.connect();
@@ -59,12 +59,12 @@ public class ClientRaspberryPI implements Runnable {
 		_output.flush();
 
 	}
-	
-	
+
+
 	public void connect()
 	{
 		try {
-			_socket = new Socket(this.ip, this._port);
+			_socket = new Socket(this.saConfig.getIpRasp(), this.saConfig.getPortRsp());
 			this._socket.setTcpNoDelay(true);
 			this._socket.setPerformancePreferences(10, 10,10);
 			_output = new PrintWriter( _socket.getOutputStream());
@@ -83,7 +83,7 @@ public class ClientRaspberryPI implements Runnable {
 		try
 		{
 			String userInput;
-			
+
 			if(_socket == null)
 			{
 				this.connect();
@@ -92,19 +92,18 @@ public class ClientRaspberryPI implements Runnable {
 			{
 				this.connect();
 			}
-			
+
+			//Init envoie des parametres vers le Rasp
+			this.parametrage();
+
 			// Open stream
 			_response = new BufferedReader(new InputStreamReader(_input));
-		
-			
-			
-			
 			while ((userInput = _response.readLine()) != null) 
 			{
 				this.sonListenerTcp.onReceive(userInput);
 			}
-			
-			
+
+
 			System.out.println("Server message: " + _response);
 		}
 		catch (UnknownHostException e)
@@ -117,12 +116,17 @@ public class ClientRaspberryPI implements Runnable {
 		}
 	}
 
+	public void parametrage()
+	{
+		this.send("{\"informations\":{\"distance_avant\":30,\"distance_arriere\":50}}");
+	}
+
 	public void arret() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+
 
 
 }

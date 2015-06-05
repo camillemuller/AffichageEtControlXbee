@@ -166,7 +166,7 @@ public class mainWindow {
 
 			String[] lesParams = {saConfig.getUrlCamera(),Integer.toString( saConfig.getPortCamera())};
 			leViewer.test(lesParams, leViewer);
-			RaspTcp = new ClientRaspberryPI(saConfig.getIpRasp(),saConfig.getPortRsp());					
+			RaspTcp = new ClientRaspberryPI(this.saConfig);					
 			ServerControl = new ServerControlHandler(saConfig.getPortLeap(),RaspTcp);
 			//Lancement du serveur TCP (Contrôle du robot)
 			ServerControl.start();
