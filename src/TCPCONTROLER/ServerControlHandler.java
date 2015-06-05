@@ -7,24 +7,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Classe permettant la création du serveur TCP
+ * Ce serveur aura pour but de retransmettre les données recu par ses client
+ * vers le Raspberry Pi
+ * @author camillemuller
+ *
+ */
 public class ServerControlHandler  extends Thread
 {
 	private ClientRaspberryPI tcpClient;
-
 	private List<Client> sesClients;
 	private int sonNumeroport;
 	private ServerSocket welcomeSocket;
 
+	
+	/**
+	 * Contrusteur de la classe
+	 * @param i numero de port
+	 * @param tcpClient instance permettant l'envoie vers le client des données recu
+	 */
 	public ServerControlHandler( int i, ClientRaspberryPI tcpClient)
 	{
 		this.sonNumeroport =i;
 		this.tcpClient = tcpClient;
 		this.sesClients = new ArrayList<Client>();
-		
-		
 	}
 
 
+	/**
+	 * Fonction permettant d'envoyer un message en broadcast a tous les clients connectées
+	 * @param message
+	 */
 	public void sendToclients(String message)
 	{
 		for(Client unClient : this.sesClients)
@@ -33,15 +47,16 @@ public class ServerControlHandler  extends Thread
 		}
 	}
 
-
+	
 	@SuppressWarnings("resource")
+	/**
+	 * Thread permettant la gestion du serveur
+	 */
 	public void run()
 	{
 
-		System.out.println("Lanchement serveur TCP ");
 		try{
 			welcomeSocket = new ServerSocket(sonNumeroport);
-			
 			while(true)
 			{
 				Socket connectionSocket = welcomeSocket.accept();
@@ -55,14 +70,17 @@ public class ServerControlHandler  extends Thread
 		}catch(Exception e)
 		{
 			e.printStackTrace();
-		
+
 		}
 	}
 
 
+	/**
+	 * Permet d'eteindre le serveur TCP
+	 */
 	public void arret() {
 		// TODO Auto-generated method stub
-		
+
 		System.out.println("start");
 		for(Client unClient : this.sesClients)
 		{			
@@ -71,7 +89,7 @@ public class ServerControlHandler  extends Thread
 		}
 		this.stop();
 		System.out.println("end");
-		
+
 		try {
 			welcomeSocket.close();
 			;
@@ -79,10 +97,15 @@ public class ServerControlHandler  extends Thread
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }
 
+/**
+ * Classe correspondant à un client s'etant connecté au serveur
+ * @author camillemuller
+ *
+ */
 class Client extends Thread
 {
 	private Socket connectionSocket;
@@ -90,10 +113,10 @@ class Client extends Thread
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
 	private ClientRaspberryPI tcpClient;
-	
+
 	public void arret()
 	{
-		
+
 		try {
 			this.outToClient.close();
 			this.inFromClient.close();
@@ -112,7 +135,7 @@ class Client extends Thread
 		c.setPerformancePreferences(MAX_PRIORITY, MAX_PRIORITY, MAX_PRIORITY);
 		connectionSocket = c;
 		this.tcpClient = tcpClient;
-		
+
 	}
 
 	public void send(String message) {
@@ -132,10 +155,10 @@ class Client extends Thread
 		{    
 			inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-			
+
 			while((clientSentence = inFromClient.readLine()) != null)
 			{
-			tcpClient.send(clientSentence);
+				tcpClient.send(clientSentence);
 			}
 		}
 		catch(IOException e)

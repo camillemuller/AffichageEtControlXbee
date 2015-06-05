@@ -23,8 +23,6 @@ public class ConfigurationHandler {
 	{
 		File ee = new File("Configuration.xml");
 		ee.delete();
-
-
 		Element racine = new Element("Configuration");
 		Document document = new Document(racine);
 		//On crée un nouvel Element etudiant et on l'ajoute
@@ -57,10 +55,18 @@ public class ConfigurationHandler {
 		Element VARLARGEUR = new Element("VARLARGEUR");
 		VARLARGEUR.setText(sesParams.get(5));
 		racine.addContent(VARLARGEUR);
-		
+
 		Element PORTRSPI = new Element("PORTRSPI");
 		PORTRSPI.setText(sesParams.get(6));
 		racine.addContent(PORTRSPI);
+		
+		Element DISTANCEARRET = new Element("DISTANCEARRET");
+		DISTANCEARRET.setText(sesParams.get(7));
+		racine.addContent(DISTANCEARRET);
+		
+		Element VITESSEMAX = new Element("VITESSEMAX");
+		VITESSEMAX.setText(sesParams.get(8));
+		racine.addContent(VITESSEMAX);
 
 
 		try
@@ -78,9 +84,6 @@ public class ConfigurationHandler {
 
 	}
 
-	
-	
-	
 	public String getUrlCamera()
 	{
 		try {
@@ -88,11 +91,11 @@ public class ConfigurationHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
-			return "http://192.168.1.1/?action=stream";
-			
+			return "http://192.168.1.1:8080/?action=stream";
+
 		}
 	}
-	
+
 	public int getPortCamera()
 	{
 		try {
@@ -101,10 +104,10 @@ public class ConfigurationHandler {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
 			return 8080;
-			
+
 		}
 	}
-	
+
 	public String getIpRasp()
 	{
 		try {
@@ -113,10 +116,10 @@ public class ConfigurationHandler {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
 			return "192.168.1.1";
-			
+
 		}
 	}
-	
+
 	public int getPortLeap()
 	{
 		try {
@@ -125,10 +128,10 @@ public class ConfigurationHandler {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
 			return 5005;
-			
+
 		}
 	}
-	
+
 	public int getHauteurCamera()
 	{
 		try {
@@ -137,10 +140,10 @@ public class ConfigurationHandler {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
 			return 640;
-			
+
 		}
 	}
-	
+
 	public int getLargeurCamera()
 	{
 		try {
@@ -149,7 +152,7 @@ public class ConfigurationHandler {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
 			return 460;
-			
+
 		}
 	}
 
@@ -161,53 +164,83 @@ public class ConfigurationHandler {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
 			return 10200;
-			
+
 		}
 	}
 	
-	
-	
+	public int getDistanceArret()
+	{
+		try {
+			return Integer.parseInt(getSesparams().get(7));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 10;
+
+		}
+	}
+
+	public int getVitesseMax()
+	{
+		try {
+			return Integer.parseInt(getSesparams().get(8));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichier xml n'existe pas");
+			return 10;
+
+		}
+	}
+
+
 	private List<String> getSesparams() throws Exception
 	{
 		List<String> laConfig = new ArrayList<String>();
 
+
+		//On crée une instance de SAXBuilder
+
+		SAXBuilder sxb = new SAXBuilder();
+		//On crée un nouveau document JDOM avec en argument le fichier XML
+		//Le parsing est terminé ;)
+		Document document = sxb.build(new File("Configuration.xml"));
+		//On initialise un nouvel élément racine avec l'élément racine du document.
+		racine = document.getRootElement();
+
+		//On crée une List contenant tous les noeuds "etudiant" de l'Element racine
+		Element URL = racine.getChild("URL");
+		laConfig.add(URL.getValue());
+		//DEBUG
+		System.out.println("URL" + URL.getValue());
+		//On crée une List contenant tous les noeuds "etudiant" de l'Element racine
+		Element PORT = racine.getChild("PORT");
+		laConfig.add(PORT.getValue());
+
+		Element ADRRSPI = racine.getChild("ADRRSPI");
+		laConfig.add(ADRRSPI.getValue());
+
+		Element PORTLEAP = racine.getChild("PORTLEAP");
+		laConfig.add(PORTLEAP.getValue());
+
+		Element VARHAUTEUR = racine.getChild("VARHAUTEUR");
+		laConfig.add(VARHAUTEUR.getValue());
+
+		Element VARLARGEUR = racine.getChild("VARLARGEUR");
+		laConfig.add(VARLARGEUR.getValue());		
+
+		Element PORTRSPI = racine.getChild("PORTRSPI");
+		laConfig.add(PORTRSPI.getValue());
+
+		Element DISTANCEARRET = racine.getChild("DISTANCEARRET");
+		laConfig.add(DISTANCEARRET.getValue());
 		
-			//On crée une instance de SAXBuilder
+		Element VITESSEMAX = racine.getChild("VITESSEMAX");
+		laConfig.add(VITESSEMAX.getValue());
+		
+		
+		return laConfig;
 
-			SAXBuilder sxb = new SAXBuilder();
-			//On crée un nouveau document JDOM avec en argument le fichier XML
-			//Le parsing est terminé ;)
-			Document document = sxb.build(new File("Configuration.xml"));
-			//On initialise un nouvel élément racine avec l'élément racine du document.
-			racine = document.getRootElement();
 
-			//On crée une List contenant tous les noeuds "etudiant" de l'Element racine
-			Element URL = racine.getChild("URL");
-			laConfig.add(URL.getValue());
-			//DEBUG
-			System.out.println("URL" + URL.getValue());
-			//On crée une List contenant tous les noeuds "etudiant" de l'Element racine
-			Element PORT = racine.getChild("PORT");
-			laConfig.add(PORT.getValue());
-
-			Element ADRRSPI = racine.getChild("ADRRSPI");
-			laConfig.add(ADRRSPI.getValue());
-
-			Element PORTLEAP = racine.getChild("PORTLEAP");
-			laConfig.add(PORTLEAP.getValue());
-
-			Element VARHAUTEUR = racine.getChild("VARHAUTEUR");
-			laConfig.add(VARHAUTEUR.getValue());
-
-			Element VARLARGEUR = racine.getChild("VARLARGEUR");
-			laConfig.add(VARLARGEUR.getValue());		
-			
-			Element PORTRSPI = racine.getChild("PORTRSPI");
-			laConfig.add(PORTRSPI.getValue());
-	
-			return laConfig;
-
-	
 
 	}
 }

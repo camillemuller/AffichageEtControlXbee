@@ -67,8 +67,8 @@ public class ConfigurationView extends JDialog {
 	 */
 
 	private mainWindow saVueP;
-	private JTextField varVitesseMax;
-	private JTextField varDistanceArret;
+	private JSpinner varVitesseMax;
+	private JSpinner varDistanceArret;
 	private JTextField varIpPart1;
 	private JTextField varIpPart2;
 	private JTextField varIpPart3;
@@ -298,13 +298,11 @@ public class ConfigurationView extends JDialog {
 		lblDistanceDarrt.setBounds(35, 231, 154, 16);
 		TabComIhm.add(lblDistanceDarrt);
 
-		varVitesseMax = new JTextField();
+		varVitesseMax = new JSpinner();
 		varVitesseMax.setBounds(201, 127, 134, 28);
 		TabComIhm.add(varVitesseMax);
-		varVitesseMax.setColumns(10);
 
-		varDistanceArret = new JTextField();
-		varDistanceArret.setColumns(10);
+		varDistanceArret = new JSpinner();
 		varDistanceArret.setBounds(201, 225, 134, 28);
 		TabComIhm.add(varDistanceArret);
 
@@ -374,6 +372,9 @@ public class ConfigurationView extends JDialog {
 						lesParams.add(varHauteur.getValue().toString() ); 
 						lesParams.add(VarLargeur.getValue().toString());
 						lesParams.add(varPortRasp.getValue().toString());
+						lesParams.add(varDistanceArret.getValue().toString());
+						lesParams.add(varVitesseMax.getValue().toString());
+
 						saVueP.changeP((int)varHauteur.getValue(), (int)VarLargeur.getValue());
 						sonCH.sauvegarde(lesParams);
 
@@ -413,5 +414,8 @@ public class ConfigurationView extends JDialog {
 				this.varHauteur.setValue( this.sonCH.getHauteurCamera()  );
 				this.VarLargeur.setValue( this.sonCH.getLargeurCamera()  );
 				this.varPortRasp.setValue( this.sonCH.getPortRsp()  );
+				this.varDistanceArret.setValue(this.sonCH.getDistanceArret());
+				this.varVitesseMax.setValue(this.sonCH.getVitesseMax());
+				
 	}
 }
