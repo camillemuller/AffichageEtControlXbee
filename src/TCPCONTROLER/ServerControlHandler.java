@@ -21,20 +21,7 @@ public class ServerControlHandler  extends Thread
 		this.tcpClient = tcpClient;
 		this.sesClients = new ArrayList<Client>();
 		
-		welcomeSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-
-		      @Override
-		      public void call(Object... args) {
-		        socket.emit("test", "awesome");
-
-		      }
-
-		    }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-		      @Override
-		      public void call(Object... args) {}
-
-		    });
+		
 	}
 
 
