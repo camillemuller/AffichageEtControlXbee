@@ -5,8 +5,8 @@
 	<classpathentry kind="lib" path="lib/jssc-2.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6.jar"/>
-	<classpathentry kind="lib" path="lib/combozola.jar"/>
 	<classpathentry kind="lib" path="lib/imgscalr-lib-4.2.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/combozola"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

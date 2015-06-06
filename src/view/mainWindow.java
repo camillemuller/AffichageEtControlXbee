@@ -12,28 +12,20 @@ import com.charliemouse.cambozola.Viewer;
 import javax.swing.JLabel;
 
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 
 import javax.swing.JButton;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JRadioButton;
-import javax.swing.Box;
-import javax.swing.border.EtchedBorder;
-
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class mainWindow {
 
-	private JFrame frmAffichageCamraEt;
+	private JFrame gestionFenetre;
 	private JFrame PanelVoiture;
 	private Viewer leViewer;
 	private ConfigurationHandler saConfig;
@@ -46,7 +38,7 @@ public class mainWindow {
 			public void run() {
 				try {
 					mainWindow window = new mainWindow();
-					window.frmAffichageCamraEt.setVisible(true);
+					window.gestionFenetre.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -68,9 +60,9 @@ public class mainWindow {
 
 	public void changeP(int lar,int lon)
 	{
-		frmAffichageCamraEt.setBounds(100, 100, lar, lon);
-		frmAffichageCamraEt.setVisible(false);
-		frmAffichageCamraEt.setVisible(true);
+		gestionFenetre.setBounds(100, 100, lar, lon);
+		gestionFenetre.setVisible(false);
+		gestionFenetre.setVisible(true);
 
 	}
 
@@ -78,46 +70,73 @@ public class mainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		gestionFenetre = new JFrame();
+		gestionFenetre.setTitle("Affichage caméra et retransmission xBee");
+		gestionFenetre.setResizable(false);
+		gestionFenetre.setAlwaysOnTop(true);
 
+		gestionFenetre.setBounds(100, 100, 414, 171 );
+		gestionFenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		final mainWindow pt = this;
 
-		frmAffichageCamraEt = new JFrame();
-		frmAffichageCamraEt.setTitle("Affichage caméra et retransmission xBee");
-		frmAffichageCamraEt.setResizable(false);
-		//frmAffichageCamraEt.setBounds(100, 100, Integer.parseInt( lesP.get(4)), Integer.parseInt( lesP.get(5)) );
-
-		//Debug
-		frmAffichageCamraEt.setBounds(100, 100, 564, 498 );
-		frmAffichageCamraEt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmAffichageCamraEt.getContentPane().setLayout(new BorderLayout(0, 0));
-		leViewer = new Viewer();
-		leViewer.setLayout(new GridLayout(1, 0, 0, 0));
-		frmAffichageCamraEt.getContentPane().add(leViewer);
-
-		Box verticalBox_1 = Box.createVerticalBox();
-		frmAffichageCamraEt.getContentPane().add(verticalBox_1, BorderLayout.EAST);
+		gestionFenetre.getContentPane().setLayout(null);
 
 		JButton btnNewButton = new JButton("Configuration");
-		verticalBox_1.add(btnNewButton);
-
-		JButton btnNewButton_1 = new JButton("Fermer");
-		verticalBox_1.add(btnNewButton_1);
+		btnNewButton.setBounds(6, 6, 131, 29);
+		gestionFenetre.getContentPane().add(btnNewButton);
 
 		final JButton btnConnect = new JButton("CONNECT");
-		verticalBox_1.add(btnConnect);
+		btnConnect.setBounds(6, 38, 131, 29);
+		gestionFenetre.getContentPane().add(btnConnect);
 
-		JLabel lblEtat = new JLabel("Etat :");
-		verticalBox_1.add(lblEtat);
+		JButton btnNewButton_1 = new JButton("Quitter");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1.setBounds(6, 68, 131, 29);
+		gestionFenetre.getContentPane().add(btnNewButton_1);
 
+		JLabel lblEtatServeur = new JLabel("Etat des connexions ");
+		lblEtatServeur.setBounds(235, 11, 131, 16);
+		gestionFenetre.getContentPane().add(lblEtatServeur);
 
-		Box verticalBox = Box.createVerticalBox();
-		verticalBox_1.add(verticalBox);
-		verticalBox.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		JLabel lblNa = new JLabel("N/A");
+		lblNa.setBounds(340, 43, 26, 16);
+		gestionFenetre.getContentPane().add(lblNa);
 
-		final JRadioButton rdbtnCamera = new JRadioButton("Camera");
-		verticalBox.add(rdbtnCamera);
-		JRadioButton rdbtnWifiTcp = new JRadioButton("Wifi tcp");
-		verticalBox.add(rdbtnWifiTcp);
+		JLabel lblServeurTcp = new JLabel("Robot : ");
+		lblServeurTcp.setBounds(235, 43, 87, 16);
+		gestionFenetre.getContentPane().add(lblServeurTcp);
+
+		JLabel lblContrleTcp = new JLabel("Contrôle :");
+		lblContrleTcp.setBounds(235, 73, 87, 16);
+		gestionFenetre.getContentPane().add(lblContrleTcp);
+
+		JLabel label_1 = new JLabel("N/A");
+		label_1.setBounds(340, 73, 26, 16);
+		gestionFenetre.getContentPane().add(label_1);
+
+		JButton btnNewButton_2 = new JButton("Affichage caméra ");
+		btnNewButton_2.setEnabled(false);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_2.setBounds(6, 101, 192, 42);
+		gestionFenetre.getContentPane().add(btnNewButton_2);
+
+		JButton btnAffichageVoiture = new JButton("Affichage voiture");
+		btnAffichageVoiture.setEnabled(false);
+		btnAffichageVoiture.setBounds(210, 101, 192, 42);
+		gestionFenetre.getContentPane().add(btnAffichageVoiture);
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
 
 		btnConnect.addMouseListener(new MouseAdapter() {
 			@Override
@@ -134,24 +153,16 @@ public class mainWindow {
 				}
 				//Connection
 			}});
-		btnNewButton_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
-			}
-		});
-
-		final mainWindow pt = this;
 		btnNewButton.addMouseListener(new MouseAdapter() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ConfigurationView sonConfigView = new ConfigurationView(pt);
+				ConfigurationView sonConfigView = new ConfigurationView(pt,leViewer);
 				changeVisibility(false);
 				sonConfigView.setVisible(true);
 
 			}
 		});
+
 
 	}
 
@@ -165,7 +176,11 @@ public class mainWindow {
 		try{
 
 			String[] lesParams = {saConfig.getUrlCamera(),Integer.toString( saConfig.getPortCamera())};
-			leViewer.test(lesParams, leViewer);
+			leViewer = new Viewer();
+			leViewer.test(lesParams);
+			leViewer.setSize(saConfig.getHauteurCamera(),saConfig.getLargeurCamera());
+			leViewer.setAlwaysOnTop(true);
+
 			RaspTcp = new ClientRaspberryPI(this.saConfig);					
 			ServerControl = new ServerControlHandler(saConfig.getPortLeap(),RaspTcp);
 			//Lancement du serveur TCP (Contrôle du robot)
@@ -248,9 +263,10 @@ public class mainWindow {
 	{
 
 		this.PanelVoiture.dispose();
+		this.leViewer.dispose();
 		try
 		{
-		
+
 			RaspTcp.arret();
 		}catch(Exception e)
 		{
@@ -274,7 +290,7 @@ public class mainWindow {
 		final VoiturePanel VoitureP = new VoiturePanel();
 		PanelVoiture.getContentPane().add(VoitureP);
 		PanelVoiture.setVisible(true);
-		PanelVoiture.setBounds(frmAffichageCamraEt.getX()+frmAffichageCamraEt.getHeight()+100,frmAffichageCamraEt.getY()+frmAffichageCamraEt.getWidth()-350, 200, 280);
+		PanelVoiture.setBounds(gestionFenetre.getX()+gestionFenetre.getHeight()+100,gestionFenetre.getY()+gestionFenetre.getWidth()-700, 200, 280);
 		PanelVoiture.setAlwaysOnTop(true);
 		PanelVoiture.setResizable(false);
 		PanelVoiture.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -285,8 +301,12 @@ public class mainWindow {
 
 	public void changeVisibility(boolean visible)
 	{
-		this.frmAffichageCamraEt.setVisible(visible);
-	if(this.PanelVoiture != null)	
+		this.gestionFenetre.setVisible(visible);
+
+		
 		this.PanelVoiture.setVisible(visible);
+		leViewer.setVisible(visible);
+		leViewer.changevisibility(visible);
+
 	}
 }

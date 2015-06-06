@@ -15,12 +15,7 @@ import javax.swing.JTextField;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +34,9 @@ import java.awt.Component;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
+
+import com.charliemouse.cambozola.Viewer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -67,6 +63,8 @@ public class ConfigurationView extends JDialog {
 	 */
 
 	private mainWindow saVueP;
+	private Viewer saCameraView;
+
 	private JSpinner varVitesseMax;
 	private JSpinner varDistanceArret;
 	private JTextField varIpPart1;
@@ -74,13 +72,16 @@ public class ConfigurationView extends JDialog {
 	private JTextField varIpPart3;
 	private JTextField varIpPart4;
 
+	
+
 	/**
 	 * Create the dialog.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ConfigurationView(mainWindow mainWindow) {
+	public ConfigurationView(mainWindow pt,Viewer laCameraView) {
 
-		saVueP = mainWindow ;
+		saVueP = pt ;
+		this.saCameraView = laCameraView;
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 502, 490);
@@ -212,26 +213,8 @@ public class ConfigurationView extends JDialog {
 		JButton btnTesterLeLien = new JButton("Test");
 		btnTesterLeLien.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				URL u;
-				try {
 
-					//TODO
-					u = new URL("http://www.example.com/");
-					HttpURLConnection huc = null;
-					huc.setRequestMethod("GET"); 
-					huc.connect() ; 
-					OutputStream os = huc.getOutputStream(); 
-					int code = huc.getResponseCode(); 
-
-					System.out.println(code);
-
-					huc = (HttpURLConnection)u.openConnection();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
-
-
+				// TODO TEST LIEN 
 			}
 		});
 		btnTesterLeLien.setBounds(412, 77, 55, 29);
@@ -375,10 +358,10 @@ public class ConfigurationView extends JDialog {
 						lesParams.add(varDistanceArret.getValue().toString());
 						lesParams.add(varVitesseMax.getValue().toString());
 
-						saVueP.changeP((int)varHauteur.getValue(), (int)VarLargeur.getValue());
-						sonCH.sauvegarde(lesParams);
-
+						
+						saCameraView.setSize((int)varHauteur.getValue(), (int)VarLargeur.getValue());
 						saVueP.changeVisibility(true);
+						sonCH.sauvegarde(lesParams);
 						dispose();
 					}
 				});
@@ -418,4 +401,6 @@ public class ConfigurationView extends JDialog {
 				this.varVitesseMax.setValue(this.sonCH.getVitesseMax());
 				
 	}
+
+
 }

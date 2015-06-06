@@ -72,6 +72,8 @@ public class ClientRaspberryPI implements Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			//Renvoie erreur connexion ihm
 		}
 
 

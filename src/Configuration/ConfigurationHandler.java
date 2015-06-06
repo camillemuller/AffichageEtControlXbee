@@ -11,13 +11,17 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import com.charliemouse.cambozola.Viewer;
+
 public class ConfigurationHandler {
 
 
 	static Element racine = new Element("Configuration");
 
+	Viewer sonViewer;
 	//On crée un nouveau Document JDOM basé sur la racine que l'on vient de créer
 	static Document document = new Document(racine);
+
 
 	public void sauvegarde(List<String> sesParams)
 	{

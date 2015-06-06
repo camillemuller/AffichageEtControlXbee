@@ -48,7 +48,6 @@ public class ServerControlHandler  extends Thread
 	}
 
 	
-	@SuppressWarnings("resource")
 	/**
 	 * Thread permettant la gestion du serveur
 	 */
@@ -78,6 +77,7 @@ public class ServerControlHandler  extends Thread
 	/**
 	 * Permet d'eteindre le serveur TCP
 	 */
+	@SuppressWarnings("deprecation")
 	public void arret() {
 		// TODO Auto-generated method stub
 
