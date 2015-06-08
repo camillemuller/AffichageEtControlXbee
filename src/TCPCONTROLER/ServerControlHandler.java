@@ -20,7 +20,7 @@ public class ServerControlHandler  extends Thread
 	private List<Client> sesClients;
 	private int sonNumeroport;
 	private ServerSocket welcomeSocket;
-
+	private ServerControlListener sonListener;
 	
 	/**
 	 * Contrusteur de la classe
@@ -55,14 +55,18 @@ public class ServerControlHandler  extends Thread
 	{
 
 		try{
+			
+			// Set a 0
+			this.sonListener.nbClient(this.sesClients.size());
 			welcomeSocket = new ServerSocket(sonNumeroport);
 			while(true)
 			{
 				Socket connectionSocket = welcomeSocket.accept();
 				if (connectionSocket != null)
 				{
-					Client client = new Client(connectionSocket,tcpClient);
+					Client client = new Client(connectionSocket,tcpClient, this);
 					sesClients.add(client);
+					this.sonListener.nbClient(this.sesClients.size());
 					client.start();
 				}
 			}
@@ -81,14 +85,13 @@ public class ServerControlHandler  extends Thread
 	public void arret() {
 		// TODO Auto-generated method stub
 
-		System.out.println("start");
 		for(Client unClient : this.sesClients)
 		{			
 			unClient.arret();
 			unClient.stop();
 		}
+		this.sonListener.nbClient(0);
 		this.stop();
-		System.out.println("end");
 
 		try {
 			welcomeSocket.close();
@@ -98,6 +101,23 @@ public class ServerControlHandler  extends Thread
 			e.printStackTrace();
 		}
 
+	}
+
+
+	public void removeClient(Client client) {
+		// TODO Auto-generated method stub
+		this.sesClients.remove(client);
+		this.sonListener.nbClient(this.sesClients.size());
+	}
+
+
+	public ServerControlListener getSonListener() {
+		return sonListener;
+	}
+
+
+	public void setSonListener(ServerControlListener sonListener) {
+		this.sonListener = sonListener;
 	}
 }
 
@@ -113,6 +133,7 @@ class Client extends Thread
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
 	private ClientRaspberryPI tcpClient;
+	private ServerControlHandler sonServer;
 
 	public void arret()
 	{
@@ -127,13 +148,21 @@ class Client extends Thread
 	}
 
 
-	public Client(Socket c, ClientRaspberryPI tcpClient) throws IOException
+	public Client(Socket c, ClientRaspberryPI tcpClient,ServerControlHandler sv) throws IOException
 	{
 		c.setTcpNoDelay(true);
 		c.setPerformancePreferences(MAX_PRIORITY, MAX_PRIORITY, MAX_PRIORITY);
 		connectionSocket = c;
 		this.tcpClient = tcpClient;
+		this.sonServer = sv;
 
+	}
+	
+	public void lostconnexion()
+	{
+	
+		this.sonServer.removeClient(this);
+		this.arret();
 	}
 
 	public void send(String message) {
@@ -158,6 +187,10 @@ class Client extends Thread
 			{
 				tcpClient.send(clientSentence);
 			}
+			
+			// Suppresion de la liste on as perdu le contact
+			// IL EST MORT JIM !!!!
+			this.lostconnexion();
 		}
 		catch(IOException e)
 		{

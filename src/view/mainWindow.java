@@ -7,6 +7,7 @@ import Configuration.ConfigurationHandler;
 import TCPCONTROLER.ClientRaspberryPI;
 import TCPCONTROLER.ClientRaspberryPiListener;
 import TCPCONTROLER.ServerControlHandler;
+import TCPCONTROLER.ServerControlListener;
 
 import com.charliemouse.cambozola.Viewer;
 
@@ -34,6 +35,7 @@ public class mainWindow {
 	private ConfigurationHandler saConfig;
 	private  JButton btnConnect;
 	private JLabel lblNa;
+	private JLabel lblNbClientServer;
 
 	/**
 	 * Launch the application.
@@ -119,9 +121,9 @@ public class mainWindow {
 		lblContrleTcp.setBounds(235, 73, 87, 16);
 		gestionFenetre.getContentPane().add(lblContrleTcp);
 
-		JLabel label_1 = new JLabel("N/A");
-		label_1.setBounds(340, 73, 159, 16);
-		gestionFenetre.getContentPane().add(label_1);
+		lblNbClientServer = new JLabel("N/A");
+		lblNbClientServer.setBounds(340, 73, 159, 16);
+		gestionFenetre.getContentPane().add(lblNbClientServer);
 
 		JButton btnNewButton_2 = new JButton("Affichage caméra ");
 		btnNewButton_2.setEnabled(false);
@@ -188,6 +190,20 @@ public class mainWindow {
 
 			RaspTcp = new ClientRaspberryPI(this.saConfig);					
 			ServerControl = new ServerControlHandler(saConfig.getPortLeap(),RaspTcp);
+			
+			
+			
+			ServerControl.setSonListener(new ServerControlListener()
+			{
+
+				@Override
+				public void nbClient(int nbClient) {
+					// TODO Auto-generated method stub
+					lblNbClientServer.setText(Integer.toString(nbClient)+" appareil(s) connecté(s)");
+				}
+				
+			});
+			
 			//Lancement du serveur TCP (Contrôle du robot)
 			ServerControl.start();
 			// Lancement du thread TCP

@@ -97,7 +97,7 @@ public class ClientRaspberryPI implements Runnable {
 			}
 
 			
-			this.sonListenerTcp.stats("Socket ouverte");	
+			this.sonListenerTcp.stats("Connexion ouverte");	
 
 			//Init envoie des parametres vers le Rasp
 			this.parametrage();
@@ -110,7 +110,8 @@ public class ClientRaspberryPI implements Runnable {
 			}
 
 
-			System.out.println("Server message: " + _response);
+			this.sonListenerTcp.stats("Connexion perdu");	
+
 		}
 		catch(SocketException e )
 		{
@@ -131,7 +132,7 @@ public class ClientRaspberryPI implements Runnable {
 		// TODO Auto-generated method stub
 			
 		this.close();
-		this.sonListenerTcp.stats("Socket fermée");	
+		this.sonListenerTcp.stats("Connexion fermée");	
 
 	}
 
