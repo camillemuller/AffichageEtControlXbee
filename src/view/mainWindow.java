@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import Configuration.ConfigurationHandler;
 import TCPCONTROLER.ClientRaspberryPI;
@@ -17,8 +18,10 @@ import javax.swing.JButton;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -243,12 +246,10 @@ public class mainWindow {
 				}
 
 				@Override
-				public void stats(int stats) {
+				public void stats(String string) {
 					// TODO Auto-generated method stub
-
+					JOptionPane.showMessageDialog(null, "Perte de connexion", "Perte de connexion avec le Raspberry",JOptionPane.ERROR_MESSAGE);	
 				}
-
-
 			};
 
 	

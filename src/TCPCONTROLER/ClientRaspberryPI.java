@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import Configuration.ConfigurationHandler;
@@ -18,6 +19,7 @@ public class ClientRaspberryPI implements Runnable {
 	private InputStream _input;
 	private BufferedReader _response;
 	private ConfigurationHandler saConfig;
+	private boolean worker = true;
 
 
 	public void setOnTcpControlHandlerListener(ClientRaspberryPiListener unListener)
@@ -29,8 +31,6 @@ public class ClientRaspberryPI implements Runnable {
 	public void close(){
 
 		try {
-			_response.close();
-			_output.close();
 			_socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -69,6 +69,7 @@ public class ClientRaspberryPI implements Runnable {
 			this._socket.setPerformancePreferences(10, 10,10);
 			_output = new PrintWriter( _socket.getOutputStream());
 			_input = _socket.getInputStream();
+			this.worker = true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,7 +101,7 @@ public class ClientRaspberryPI implements Runnable {
 
 			// Open stream
 			_response = new BufferedReader(new InputStreamReader(_input));
-			while ((userInput = _response.readLine()) != null) 
+			while ( this.worker == true  && ((userInput = _response.readLine()) != null)) 
 			{
 				this.sonListenerTcp.onReceive(userInput);
 			}
@@ -110,7 +111,7 @@ public class ClientRaspberryPI implements Runnable {
 		}
 		catch (UnknownHostException e)
 		{
-			e.printStackTrace();
+			this.sonListenerTcp.stats(e.getMessage());
 		}
 		catch (IOException e)
 		{
@@ -127,7 +128,10 @@ public class ClientRaspberryPI implements Runnable {
 
 	public void arret() {
 		// TODO Auto-generated method stub
-
+		this.worker = false;
+		
+		
+		this.close();
 	}
 
 
