@@ -187,7 +187,7 @@ public class mainWindow {
 			//Lancement du serveur TCP (Contrôle du robot)
 			ServerControl.start();
 			// Lancement du thread TCP
-			(new Thread(RaspTcp)).start();
+			
 			final VoiturePanel VoitureP = afficheVoiture();
 			/*Recupération d'informations venant du rasp*/
 			//{"informations":{"distance":30}}
@@ -251,8 +251,9 @@ public class mainWindow {
 
 			};
 
+	
 			RaspTcp.setOnTcpControlHandlerListener(lstRsp);
-
+			(new Thread(RaspTcp)).start();
 		}catch(Exception ee){
 			ee.printStackTrace();
 		}

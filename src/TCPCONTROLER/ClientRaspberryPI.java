@@ -120,7 +120,9 @@ public class ClientRaspberryPI implements Runnable {
 
 	public void parametrage()
 	{
-		this.send("{\"informations\":{\"distance_avant\":30,\"distance_arriere\":50}}");
+		String cmd  ="{\"configuration\":{\"distance_arret\":"+this.saConfig.getDistanceArret()+",\"vitesse_max\":"+this.saConfig.getVitesseMax()+"}}\n" ; 
+		System.out.println(cmd);
+		this.send(cmd);
 	}
 
 	public void arret() {

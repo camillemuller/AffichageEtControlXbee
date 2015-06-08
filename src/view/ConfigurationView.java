@@ -358,8 +358,9 @@ public class ConfigurationView extends JDialog {
 						lesParams.add(varDistanceArret.getValue().toString());
 						lesParams.add(varVitesseMax.getValue().toString());
 
-						
+						if(saCameraView != null)
 						saCameraView.setSize((int)varHauteur.getValue(), (int)VarLargeur.getValue());
+						
 						saVueP.changeVisibility(true);
 						sonCH.sauvegarde(lesParams);
 						dispose();
