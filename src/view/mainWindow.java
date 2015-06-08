@@ -78,7 +78,7 @@ public class mainWindow {
 	 */
 	private void initialize() {
 		gestionFenetre = new JFrame();
-		gestionFenetre.setTitle("Affichage caméra et retransmission xBee");
+		gestionFenetre.setTitle("Affichage caméra et retransmission RC");
 		gestionFenetre.setResizable(false);
 		gestionFenetre.setAlwaysOnTop(true);
 
@@ -93,7 +93,7 @@ public class mainWindow {
 		btnNewButton.setBounds(6, 6, 131, 29);
 		gestionFenetre.getContentPane().add(btnNewButton);
 
-		btnConnect = new JButton("CONNECT");
+		btnConnect = new JButton("Connection");
 		btnConnect.setBounds(6, 38, 131, 29);
 		gestionFenetre.getContentPane().add(btnConnect);
 
@@ -148,15 +148,15 @@ public class mainWindow {
 		btnConnect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(btnConnect.getText() == "CONNECT")
+				if(btnConnect.getText() == "Connection")
 				{
 					connection();
-					btnConnect.setText("DISCONNECT");
+					btnConnect.setText("Déconnection");
 				}
 				else
 				{
 					disconnect();
-					btnConnect.setText("CONNECT");
+					btnConnect.setText("Connection");
 				}
 				//Connection
 			}});
@@ -324,7 +324,7 @@ public class mainWindow {
 	{
 		this.gestionFenetre.setVisible(visible);
 		
-		if(this.btnConnect.getText() == "DISCONNECT")
+		if(this.btnConnect.getText() == "Déconnection")
 		{
 		this.PanelVoiture.setVisible(visible);
 		leViewer.setVisible(visible);
