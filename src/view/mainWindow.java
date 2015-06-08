@@ -29,6 +29,7 @@ public class mainWindow {
 	private JFrame PanelVoiture;
 	private Viewer leViewer;
 	private ConfigurationHandler saConfig;
+	private  JButton btnConnect;
 
 	/**
 	 * Launch the application.
@@ -86,7 +87,7 @@ public class mainWindow {
 		btnNewButton.setBounds(6, 6, 131, 29);
 		gestionFenetre.getContentPane().add(btnNewButton);
 
-		final JButton btnConnect = new JButton("CONNECT");
+		btnConnect = new JButton("CONNECT");
 		btnConnect.setBounds(6, 38, 131, 29);
 		gestionFenetre.getContentPane().add(btnConnect);
 
@@ -302,11 +303,13 @@ public class mainWindow {
 	public void changeVisibility(boolean visible)
 	{
 		this.gestionFenetre.setVisible(visible);
-
 		
+		if(this.btnConnect.getText() == "DISCONNECT")
+		{
 		this.PanelVoiture.setVisible(visible);
 		leViewer.setVisible(visible);
 		leViewer.changevisibility(visible);
+		}
 
 	}
 }
