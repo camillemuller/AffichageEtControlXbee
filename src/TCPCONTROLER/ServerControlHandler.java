@@ -118,8 +118,6 @@ class Client extends Thread
 	{
 
 		try {
-			this.outToClient.close();
-			this.inFromClient.close();
 			this.connectionSocket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -33,6 +33,7 @@ public class mainWindow {
 	private Viewer leViewer;
 	private ConfigurationHandler saConfig;
 	private  JButton btnConnect;
+	private JLabel lblNa;
 
 	/**
 	 * Launch the application.
@@ -79,7 +80,7 @@ public class mainWindow {
 		gestionFenetre.setResizable(false);
 		gestionFenetre.setAlwaysOnTop(true);
 
-		gestionFenetre.setBounds(100, 100, 414, 171 );
+		gestionFenetre.setBounds(100, 100, 540, 171 );
 		gestionFenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final mainWindow pt = this;
@@ -106,8 +107,8 @@ public class mainWindow {
 		lblEtatServeur.setBounds(235, 11, 131, 16);
 		gestionFenetre.getContentPane().add(lblEtatServeur);
 
-		JLabel lblNa = new JLabel("N/A");
-		lblNa.setBounds(340, 43, 26, 16);
+		 lblNa = new JLabel("N/A");
+		lblNa.setBounds(340, 43, 159, 16);
 		gestionFenetre.getContentPane().add(lblNa);
 
 		JLabel lblServeurTcp = new JLabel("Robot : ");
@@ -119,7 +120,7 @@ public class mainWindow {
 		gestionFenetre.getContentPane().add(lblContrleTcp);
 
 		JLabel label_1 = new JLabel("N/A");
-		label_1.setBounds(340, 73, 26, 16);
+		label_1.setBounds(340, 73, 159, 16);
 		gestionFenetre.getContentPane().add(label_1);
 
 		JButton btnNewButton_2 = new JButton("Affichage caméra ");
@@ -133,7 +134,7 @@ public class mainWindow {
 
 		JButton btnAffichageVoiture = new JButton("Affichage voiture");
 		btnAffichageVoiture.setEnabled(false);
-		btnAffichageVoiture.setBounds(210, 101, 192, 42);
+		btnAffichageVoiture.setBounds(340, 101, 192, 42);
 		gestionFenetre.getContentPane().add(btnAffichageVoiture);
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -248,7 +249,8 @@ public class mainWindow {
 				@Override
 				public void stats(String string) {
 					// TODO Auto-generated method stub
-					JOptionPane.showMessageDialog(null, "Perte de connexion", "Perte de connexion avec le Raspberry",JOptionPane.ERROR_MESSAGE);	
+					//JOptionPane.showMessageDialog(null, "Perte de connexion", string,JOptionPane.ERROR_MESSAGE);	
+					lblNa.setText(string);	
 				}
 			};
 

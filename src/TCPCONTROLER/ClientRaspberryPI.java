@@ -19,7 +19,6 @@ public class ClientRaspberryPI implements Runnable {
 	private InputStream _input;
 	private BufferedReader _response;
 	private ConfigurationHandler saConfig;
-	private boolean worker = true;
 
 
 	public void setOnTcpControlHandlerListener(ClientRaspberryPiListener unListener)
@@ -31,7 +30,9 @@ public class ClientRaspberryPI implements Runnable {
 	public void close(){
 
 		try {
+
 			_socket.close();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,7 +70,6 @@ public class ClientRaspberryPI implements Runnable {
 			this._socket.setPerformancePreferences(10, 10,10);
 			_output = new PrintWriter( _socket.getOutputStream());
 			_input = _socket.getInputStream();
-			this.worker = true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,12 +96,15 @@ public class ClientRaspberryPI implements Runnable {
 				this.connect();
 			}
 
+			
+			this.sonListenerTcp.stats("Socket ouverte");	
+
 			//Init envoie des parametres vers le Rasp
 			this.parametrage();
 
 			// Open stream
 			_response = new BufferedReader(new InputStreamReader(_input));
-			while ( this.worker == true  && ((userInput = _response.readLine()) != null)) 
+			while ( ((userInput = _response.readLine()) != null)) 
 			{
 				this.sonListenerTcp.onReceive(userInput);
 			}
@@ -109,12 +112,11 @@ public class ClientRaspberryPI implements Runnable {
 
 			System.out.println("Server message: " + _response);
 		}
-		catch (UnknownHostException e)
+		catch(SocketException e )
 		{
-			this.sonListenerTcp.stats(e.getMessage());
-		}
-		catch (IOException e)
-		{
+		//this.sonListenerTcp.stats(e.getLocalizedMessage());	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -122,16 +124,15 @@ public class ClientRaspberryPI implements Runnable {
 	public void parametrage()
 	{
 		String cmd  ="{\"configuration\":{\"distance_arret\":"+this.saConfig.getDistanceArret()+",\"vitesse_max\":"+this.saConfig.getVitesseMax()+"}}\n" ; 
-		System.out.println(cmd);
 		this.send(cmd);
 	}
 
 	public void arret() {
 		// TODO Auto-generated method stub
-		this.worker = false;
-		
-		
+			
 		this.close();
+		this.sonListenerTcp.stats("Socket fermée");	
+
 	}
 
 
