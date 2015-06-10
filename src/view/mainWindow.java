@@ -1,8 +1,6 @@
 package view;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import Configuration.ConfigurationHandler;
 import TCPCONTROLER.ClientRaspberryPI;
 import TCPCONTROLER.ClientRaspberryPiListener;
@@ -82,7 +80,7 @@ public class mainWindow {
 		gestionFenetre.setResizable(false);
 		gestionFenetre.setAlwaysOnTop(true);
 
-		gestionFenetre.setBounds(100, 100, 540, 171 );
+		gestionFenetre.setBounds(100, 100, 538, 122 );
 		gestionFenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final mainWindow pt = this;
@@ -124,20 +122,6 @@ public class mainWindow {
 		lblNbClientServer = new JLabel("N/A");
 		lblNbClientServer.setBounds(340, 73, 159, 16);
 		gestionFenetre.getContentPane().add(lblNbClientServer);
-
-		JButton btnNewButton_2 = new JButton("Affichage caméra ");
-		btnNewButton_2.setEnabled(false);
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_2.setBounds(6, 101, 192, 42);
-		gestionFenetre.getContentPane().add(btnNewButton_2);
-
-		JButton btnAffichageVoiture = new JButton("Affichage voiture");
-		btnAffichageVoiture.setEnabled(false);
-		btnAffichageVoiture.setBounds(340, 101, 192, 42);
-		gestionFenetre.getContentPane().add(btnAffichageVoiture);
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -179,6 +163,7 @@ public class mainWindow {
 
 	public void connection()
 	{
+
 		// Caméra
 		try{
 
@@ -235,7 +220,6 @@ public class mainWindow {
 							parser.parse(userInput, finderAvant, true);
 							if(finderAvant.isFound()){
 								finderAvant.setFound(false);
-								System.out.println("found id:");
 								avant =  Long.toString((long) finderAvant.getValue());
 							}
 						}           
@@ -249,7 +233,6 @@ public class mainWindow {
 							parserArr.parse(userInput, finderArriere, true);
 							if(finderArriere.isFound()){
 								finderArriere.setFound(false);
-								System.out.println("found id:");
 								arriere =Long.toString((long) finderArriere.getValue());
 							}
 						}           

@@ -104,6 +104,11 @@ public class ServerControlHandler  extends Thread
 	}
 
 
+	/**
+	 * Permet la suppresion d'un client du serveur au niveau de la liste 
+	 * et de mettre a jour le compteur à l'ihm
+	 * @param client
+	 */
 	public void removeClient(Client client) {
 		// TODO Auto-generated method stub
 		this.sesClients.remove(client);

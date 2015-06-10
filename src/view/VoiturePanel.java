@@ -29,30 +29,36 @@ public class VoiturePanel extends JPanel {
 	}
 	public void changeDistance(String distanceAvant,String distanceArriere)
 	{
-		this.distanceAvant = distanceAvant;
-		this.distanceArriere = distanceArriere;
-		this.repaint();
+
+		if(Integer.parseInt(distanceAvant) >= 0)
+			this.distanceAvant = distanceAvant;
+		else
+			this.distanceAvant = "0";
 		
+		if(Integer.parseInt(distanceArriere) >= 0)
+		this.distanceArriere = distanceArriere;
+		else
+		this.distanceArriere = "0";
+		
+		this.repaint();
+
 	}
-	
+
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		
-		System.out.println(this.getSize().getHeight());
-		System.out.println(this.getSize().getWidth());
+
+
+
 
 		g.drawImage(image,  
-				 (int)Math.round(this.getHeight()*0.2),(int) Math.round(this.getWidth()*0.25), this); 
-		
+				(int)Math.round(this.getHeight()*0.2),(int) Math.round(this.getWidth()*0.25), this); 
 
-		
-		System.out.println("Debug avant : "+distanceAvant+"\n");
-		System.out.println("Debug avant : "+distanceArriere+"\n");
 
-        g.setColor(Color.red);
+
+
+		g.setColor(Color.red);
 		g.drawString(distanceAvant+" cm", (int) (this.getSize().getHeight()*0.28), (int) (this.getSize().getHeight()*0.15));
-		
+
 		g.drawString(distanceArriere+" cm", (int) (this.getSize().getHeight()*0.28), (int) (this.getSize().getHeight()*0.90));
 	}
 

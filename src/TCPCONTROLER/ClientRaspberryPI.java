@@ -7,10 +7,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import Configuration.ConfigurationHandler;
 
+/**
+ * Permet la gestion de la connexion vers le Raspberry Pi 
+ * C'est une classe qui implémente Runnable, c'est a dire qu'elle est threadable ( run() )
+ * 
+ * @author camillemuller
+ *
+ */
 public class ClientRaspberryPI implements Runnable {
 
 	private ClientRaspberryPiListener sonListenerTcp;
@@ -21,12 +27,20 @@ public class ClientRaspberryPI implements Runnable {
 	private ConfigurationHandler saConfig;
 
 
+	/**
+	 * Permet de parametré le listener de la classe 
+	 * @param unListener le listener de la classe ClientRaspberryPiListener 
+	 */
 	public void setOnTcpControlHandlerListener(ClientRaspberryPiListener unListener)
 	{
 		this.sonListenerTcp = unListener;
 
 	}
+	
 
+	/**
+	 * Fermeture de la connexion
+	 */
 	public void close(){
 
 		try {
@@ -39,12 +53,20 @@ public class ClientRaspberryPI implements Runnable {
 		}	
 	}
 
+	/**
+	 * Constructeur de la classe
+	 * @param saConfig doit récupérer un pointeur vers une instance de ConfigurationHandler pour pouvoir ce configurer
+	 */
 	public ClientRaspberryPI(ConfigurationHandler saConfig)
 	{
 		this.saConfig = saConfig;
 	}
 
 
+	/**
+	 * Envoie de données vers le Raspberry pi quand la connexion est effective. ( connect() ) 
+	 * @param a
+	 */
 	public void send(String a)
 	{
 
@@ -62,6 +84,9 @@ public class ClientRaspberryPI implements Runnable {
 	}
 
 
+	/**
+	 * Permet de créer une connexion vers le Raspberry Pi
+	 */
 	public void connect()
 	{
 		try {
@@ -82,6 +107,10 @@ public class ClientRaspberryPI implements Runnable {
 	}
 
 	@Override
+	/**
+	 * C'est le thread de la classe 
+	 * A l'intérieur du thread sera gérer la récuperation des données envoyer par le Raspberry pi
+	 */
 	public void run() {
 		try
 		{
@@ -115,7 +144,7 @@ public class ClientRaspberryPI implements Runnable {
 		}
 		catch(SocketException e )
 		{
-		//this.sonListenerTcp.stats(e.getLocalizedMessage());	
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
