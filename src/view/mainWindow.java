@@ -1,26 +1,19 @@
 package view;
 
 import javax.swing.JFrame;
+
 import Configuration.ConfigurationHandler;
+import Configuration.JSonRaspParser;
 import TCPCONTROLER.ClientRaspberryPI;
 import TCPCONTROLER.ClientRaspberryPiListener;
 import TCPCONTROLER.ServerControlHandler;
 import TCPCONTROLER.ServerControlListener;
-
 import com.charliemouse.cambozola.Viewer;
-
 import javax.swing.JLabel;
-
 import java.awt.EventQueue;
-
 import javax.swing.JButton;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -172,12 +165,8 @@ public class mainWindow {
 			leViewer.test(lesParams);
 			leViewer.setSize(saConfig.getHauteurCamera(),saConfig.getLargeurCamera());
 			leViewer.setAlwaysOnTop(true);
-
 			RaspTcp = new ClientRaspberryPI(this.saConfig);					
 			ServerControl = new ServerControlHandler(saConfig.getPortLeap(),RaspTcp);
-			
-			
-			
 			ServerControl.setSonListener(new ServerControlListener()
 			{
 
@@ -192,7 +181,6 @@ public class mainWindow {
 			//Lancement du serveur TCP (Contrôle du robot)
 			ServerControl.start();
 			// Lancement du thread TCP
-			
 			final VoiturePanel VoitureP = afficheVoiture();
 			/*Recupération d'informations venant du rasp*/
 			//{"informations":{"distance":30}}
@@ -200,49 +188,8 @@ public class mainWindow {
 
 				public void onReceive(String userInput)
 				{
-
-					System.out.println("User input "+userInput);
-
-					//{"informations":{"distance":30}}
-
-					JSONParser parser = new JSONParser();
-					JSONParser parserArr = new JSONParser();
-
-					KeyFinder finderAvant = new KeyFinder();
-					KeyFinder finderArriere = new KeyFinder();
-
-					String avant= "";
-					String arriere = "";
-
-					finderAvant.setMatchKey("distance_avant");
-					try{
-						while(!finderAvant.isEnd()){
-							parser.parse(userInput, finderAvant, true);
-							if(finderAvant.isFound()){
-								finderAvant.setFound(false);
-								avant =  Long.toString((long) finderAvant.getValue());
-							}
-						}           
-					}
-					catch(ParseException pe){
-						pe.printStackTrace();
-					}
-					finderArriere.setMatchKey("distance_arriere");
-					try{
-						while(!finderArriere.isEnd()){
-							parserArr.parse(userInput, finderArriere, true);
-							if(finderArriere.isFound()){
-								finderArriere.setFound(false);
-								arriere =Long.toString((long) finderArriere.getValue());
-							}
-						}           
-					}
-					catch(ParseException pe){
-						pe.printStackTrace();
-					}
-					VoitureP.changeDistance(avant,arriere);
-
-
+					JSonRaspParser.getParamsDistanceArriereAvant(userInput);
+					VoitureP.changeDistance(JSonRaspParser.getAvant(),JSonRaspParser.getArriere());
 				}
 
 				@Override

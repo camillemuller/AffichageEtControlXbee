@@ -44,6 +44,12 @@ import java.awt.event.ActionEvent;
 
 
 @SuppressWarnings("serial")
+
+/**
+ * Vue de la configuration
+ * @author camillemuller
+ *
+ */
 public class ConfigurationView extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -52,19 +58,12 @@ public class ConfigurationView extends JDialog {
 	private JLabel lblPort;
 	private ConfigurationHandler sonCH;
 	private JSpinner PortCamera;
-
 	private JSpinner varPortLeap;
 	private JSpinner varPortRasp;
 	private JSpinner varHauteur;
 	private JSpinner VarLargeur;
-	/*
-	 * LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 -f 29 -r 1280x720" -o "/usr/local/lib/output_http.so -w /usr/local/www -p 8080"
-	 * 
-	 */
-
 	private mainWindow saVueP;
 	private Viewer saCameraView;
-
 	private JSpinner varVitesseMax;
 	private JSpinner varDistanceArret;
 	private JTextField varIpPart1;
@@ -72,7 +71,7 @@ public class ConfigurationView extends JDialog {
 	private JTextField varIpPart3;
 	private JTextField varIpPart4;
 
-	
+
 
 	/**
 	 * Create the dialog.
@@ -90,10 +89,6 @@ public class ConfigurationView extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		this.sonCH = new ConfigurationHandler();
 		contentPanel.setLayout(null);
-
-
-
-		//Remplissage port com
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(6, 6, 492, 429);
@@ -336,33 +331,8 @@ public class ConfigurationView extends JDialog {
 				Sauvegarder.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-
-						IPAdressValidator un = new IPAdressValidator();
-							if(!un.validate(varIpPart1.getText()+"."+varIpPart2.getText()+"."+varIpPart3.getText()+"."+varIpPart4.getText() ))
-						{
-							JOptionPane.showMessageDialog(null, "Adresse IP non valide Raspberry", "Adresse IP Raspberry",JOptionPane.WARNING_MESSAGE);	
-							return;
-						}
-
-
-						List<String> lesParams = new ArrayList<String>();
-						lesParams.add(UrlCamera.getText());
-						lesParams.add(PortCamera.getValue().toString());
-
-						//TODO
-						lesParams.add(varIpPart1.getText()+"."+varIpPart2.getText()+"."+varIpPart3.getText()+"."+varIpPart4.getText()); // Ancien serial port
-						lesParams.add( varPortLeap.getValue().toString()  );
-						lesParams.add(varHauteur.getValue().toString() ); 
-						lesParams.add(VarLargeur.getValue().toString());
-						lesParams.add(varPortRasp.getValue().toString());
-						lesParams.add(varDistanceArret.getValue().toString());
-						lesParams.add(varVitesseMax.getValue().toString());
-
-						if(saCameraView != null)
-						saCameraView.setSize((int)varHauteur.getValue(), (int)VarLargeur.getValue());
-						
+						sauvegarde();
 						saVueP.changeVisibility(true);
-						sonCH.sauvegarde(lesParams);
 						dispose();
 					}
 				});
@@ -375,6 +345,7 @@ public class ConfigurationView extends JDialog {
 				cancelButton.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
+	
 						saVueP.changeVisibility(true);
 						dispose();
 
@@ -384,23 +355,65 @@ public class ConfigurationView extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-				this.UrlCamera.setText(this.sonCH.getUrlCamera());
-				this.PortCamera.setValue( this.sonCH.getPortCamera());
-				String ip = this.sonCH.getIpRasp();
-				int index1dot =  ip.indexOf(".");
-				this.varIpPart1.setText(ip.substring(0,   index1dot   ));
-				int index2dot = ip.indexOf(".",  ip.indexOf(".") +1);
-				this.varIpPart2.setText(ip.substring(index1dot+1,  index2dot    ));
-				int index3dot = ip.indexOf(".",  index2dot +1);
-				this.varIpPart3.setText(ip.substring(index2dot+1,  index3dot    ));
-				this.varIpPart4.setText(ip.substring(index3dot+1,  ip.length()    ));
-				this.varPortLeap.setValue(this.sonCH.getPortLeap() );
-				this.varHauteur.setValue( this.sonCH.getHauteurCamera()  );
-				this.VarLargeur.setValue( this.sonCH.getLargeurCamera()  );
-				this.varPortRasp.setValue( this.sonCH.getPortRsp()  );
-				this.varDistanceArret.setValue(this.sonCH.getDistanceArret());
-				this.varVitesseMax.setValue(this.sonCH.getVitesseMax());
-				
+
+		this.setFieldConfiguration();
+
+	}
+
+
+	/**
+	 * Remplit les champs en fonction du fichier de configuration ou par default si non-existant
+	 */
+	public void  setFieldConfiguration()
+	{
+		this.UrlCamera.setText(this.sonCH.getUrlCamera());
+		this.PortCamera.setValue( this.sonCH.getPortCamera());
+		String ip = this.sonCH.getIpRasp();
+		int index1dot =  ip.indexOf(".");
+		this.varIpPart1.setText(ip.substring(0,   index1dot   ));
+		int index2dot = ip.indexOf(".",  ip.indexOf(".") +1);
+		this.varIpPart2.setText(ip.substring(index1dot+1,  index2dot    ));
+		int index3dot = ip.indexOf(".",  index2dot +1);
+		this.varIpPart3.setText(ip.substring(index2dot+1,  index3dot    ));
+		this.varIpPart4.setText(ip.substring(index3dot+1,  ip.length()    ));
+		this.varPortLeap.setValue(this.sonCH.getPortLeap() );
+		this.varHauteur.setValue( this.sonCH.getHauteurCamera()  );
+		this.VarLargeur.setValue( this.sonCH.getLargeurCamera()  );
+		this.varPortRasp.setValue( this.sonCH.getPortRsp()  );
+		this.varDistanceArret.setValue(this.sonCH.getDistanceArret());
+		this.varVitesseMax.setValue(this.sonCH.getVitesseMax());
+	}
+
+	/**
+	 * Sauvegarde des parametres de la fenêtre 
+	 */
+	public void sauvegarde()
+	{
+		IPAdressValidator un = new IPAdressValidator();
+		if(!un.validate(varIpPart1.getText()+"."+varIpPart2.getText()+"."+varIpPart3.getText()+"."+varIpPart4.getText() ))
+		{
+			JOptionPane.showMessageDialog(null, "Adresse IP non valide Raspberry", "Adresse IP Raspberry",JOptionPane.WARNING_MESSAGE);	
+			return;
+		}
+
+
+		List<String> lesParams = new ArrayList<String>();
+		lesParams.add(UrlCamera.getText());
+		lesParams.add(PortCamera.getValue().toString());
+
+		//TODO
+		lesParams.add(varIpPart1.getText()+"."+varIpPart2.getText()+"."+varIpPart3.getText()+"."+varIpPart4.getText()); // Ancien serial port
+		lesParams.add( varPortLeap.getValue().toString()  );
+		lesParams.add(varHauteur.getValue().toString() ); 
+		lesParams.add(VarLargeur.getValue().toString());
+		lesParams.add(varPortRasp.getValue().toString());
+		lesParams.add(varDistanceArret.getValue().toString());
+		lesParams.add(varVitesseMax.getValue().toString());
+
+		if(saCameraView != null)
+			saCameraView.setSize((int)varHauteur.getValue(), (int)VarLargeur.getValue());
+
+		sonCH.sauvegarde(lesParams);
 	}
 
 

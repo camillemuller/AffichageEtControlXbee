@@ -151,12 +151,18 @@ public class ClientRaspberryPI implements Runnable {
 		}
 	}
 
+	/**
+	 * Permet d'envoyer au raspberry pi 
+	 */
 	public void parametrage()
 	{
 		String cmd  ="{\"configuration\":{\"distance_arret\":"+this.saConfig.getDistanceArret()+",\"vitesse_max\":"+this.saConfig.getVitesseMax()+"}}\n" ; 
 		this.send(cmd);
 	}
-
+	
+	/**
+	 * Arret de la connexion
+	 */
 	public void arret() {
 		// TODO Auto-generated method stub
 			

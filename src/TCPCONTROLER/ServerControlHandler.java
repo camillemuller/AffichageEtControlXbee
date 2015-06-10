@@ -188,6 +188,7 @@ class Client extends Thread
 			inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
+			// Boucle en route temps que le client est connecté
 			while((clientSentence = inFromClient.readLine()) != null)
 			{
 				tcpClient.send(clientSentence);
