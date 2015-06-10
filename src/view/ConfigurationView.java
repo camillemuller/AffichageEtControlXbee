@@ -58,8 +58,8 @@ public class ConfigurationView extends JDialog {
 	private JLabel lblPort;
 	private ConfigurationHandler sonCH;
 	private JSpinner PortCamera;
-	private JSpinner varPortLeap;
 	private JSpinner varPortRasp;
+	private JSpinner varPortLeap;
 	private JSpinner varHauteur;
 	private JSpinner VarLargeur;
 	private mainWindow saVueP;
@@ -176,10 +176,10 @@ public class ConfigurationView extends JDialog {
 			lblPartieContrle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		}
 
-		varPortRasp = new JSpinner();
-		varPortRasp.setMaximumSize(new Dimension(100, 100));
-		varPortRasp.setBounds(51, 238, 93, 38);
-		panel.add(varPortRasp);
+		varPortLeap = new JSpinner();
+		varPortLeap.setMaximumSize(new Dimension(100, 100));
+		varPortLeap.setBounds(51, 238, 93, 38);
+		panel.add(varPortLeap);
 
 		JLabel label_2 = new JLabel("Port :");
 		label_2.setBounds(6, 253, 33, 9);
@@ -200,10 +200,10 @@ public class ConfigurationView extends JDialog {
 		label_1.setBounds(283, 347, 33, 9);
 		panel.add(label_1);
 
-		varPortLeap = new JSpinner();
-		varPortLeap.setBounds(326, 332, 77, 38);
-		panel.add(varPortLeap);
-		varPortLeap.setMaximumSize(new Dimension(100,100));
+		varPortRasp = new JSpinner();
+		varPortRasp.setBounds(326, 332, 77, 38);
+		panel.add(varPortRasp);
+		varPortRasp.setMaximumSize(new Dimension(100,100));
 
 		JButton btnTesterLeLien = new JButton("Test");
 		btnTesterLeLien.addActionListener(new ActionListener() {
@@ -376,10 +376,10 @@ public class ConfigurationView extends JDialog {
 		int index3dot = ip.indexOf(".",  index2dot +1);
 		this.varIpPart3.setText(ip.substring(index2dot+1,  index3dot    ));
 		this.varIpPart4.setText(ip.substring(index3dot+1,  ip.length()    ));
-		this.varPortLeap.setValue(this.sonCH.getPortLeap() );
+		this.varPortRasp.setValue(this.sonCH.getPortRsp() );
 		this.varHauteur.setValue( this.sonCH.getHauteurCamera()  );
 		this.VarLargeur.setValue( this.sonCH.getLargeurCamera()  );
-		this.varPortRasp.setValue( this.sonCH.getPortRsp()  );
+		this.varPortLeap.setValue( this.sonCH.getPortLeap()  );
 		this.varDistanceArret.setValue(this.sonCH.getDistanceArret());
 		this.varVitesseMax.setValue(this.sonCH.getVitesseMax());
 	}
