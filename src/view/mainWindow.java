@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 import Configuration.ConfigurationHandler;
 import Configuration.JSonRaspParser;
@@ -8,10 +9,15 @@ import TCPCONTROLER.ClientRaspberryPI;
 import TCPCONTROLER.ClientRaspberryPiListener;
 import TCPCONTROLER.ServerControlHandler;
 import TCPCONTROLER.ServerControlListener;
+
 import com.charliemouse.cambozola.Viewer;
+
 import javax.swing.JLabel;
+
 import java.awt.EventQueue;
+
 import javax.swing.JButton;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +41,13 @@ public class mainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
+		               String                lookAndFeel = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+		                UIManager.setLookAndFeel(lookAndFeel);
 					mainWindow window = new mainWindow();
 					window.gestionFenetre.setVisible(true);
+					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
