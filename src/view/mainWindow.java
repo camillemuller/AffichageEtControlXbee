@@ -42,8 +42,10 @@ public class mainWindow {
 			public void run() {
 				try {
 					
-		               String                lookAndFeel = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
-		                UIManager.setLookAndFeel(lookAndFeel);
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // For use Ubuntu theme
+					
+		              // String                lookAndFeel = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+		              //  UIManager.setLookAndFeel(lookAndFeel);
 					mainWindow window = new mainWindow();
 					window.gestionFenetre.setVisible(true);
 					

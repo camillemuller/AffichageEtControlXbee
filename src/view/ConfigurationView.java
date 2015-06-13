@@ -272,7 +272,7 @@ public class ConfigurationView extends JDialog {
 		lblVitesseMaximal.setBounds(35, 133, 154, 16);
 		TabComIhm.add(lblVitesseMaximal);
 
-		JLabel lblDistanceDarrt = new JLabel("Distance d'arrêt (m) : ");
+		JLabel lblDistanceDarrt = new JLabel("Distance d'arrêt (cm) : ");
 		lblDistanceDarrt.setBounds(35, 231, 154, 16);
 		TabComIhm.add(lblDistanceDarrt);
 
