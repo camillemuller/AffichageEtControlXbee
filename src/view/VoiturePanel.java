@@ -47,14 +47,8 @@ public class VoiturePanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-
-
-
 		g.drawImage(image,  
 				(int)Math.round(this.getHeight()*0.2),(int) Math.round(this.getWidth()*0.25), this); 
-
-
-
 
 		g.setColor(Color.red);
 		g.drawString(distanceAvant+" cm", (int) (this.getSize().getHeight()*0.28), (int) (this.getSize().getHeight()*0.15));

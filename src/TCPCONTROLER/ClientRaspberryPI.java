@@ -25,6 +25,7 @@ public class ClientRaspberryPI implements Runnable {
 	private InputStream _input;
 	private BufferedReader _response;
 	private ConfigurationHandler saConfig;
+	private HeartBit sonHt;
 
 
 	/**
@@ -36,7 +37,7 @@ public class ClientRaspberryPI implements Runnable {
 		this.sonListenerTcp = unListener;
 
 	}
-	
+
 
 	/**
 	 * Fermeture de la connexion
@@ -95,10 +96,11 @@ public class ClientRaspberryPI implements Runnable {
 			this._socket.setPerformancePreferences(10, 10,10);
 			_output = new PrintWriter( _socket.getOutputStream());
 			_input = _socket.getInputStream();
+			sonHt = new HeartBit(this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 			//Renvoie erreur connexion ihm
 		}
 
@@ -125,11 +127,13 @@ public class ClientRaspberryPI implements Runnable {
 				this.connect();
 			}
 
-			
+
 			this.sonListenerTcp.stats("Connexion ouverte");	
 
 			//Init envoie des parametres vers le Rasp
 			this.parametrage();
+
+			sonHt.start();
 
 			// Open stream
 			_response = new BufferedReader(new InputStreamReader(_input));
@@ -139,6 +143,7 @@ public class ClientRaspberryPI implements Runnable {
 			}
 
 
+			sonHt.setRun(false);
 			this.sonListenerTcp.stats("Connexion perdu");	
 
 		}
@@ -156,16 +161,23 @@ public class ClientRaspberryPI implements Runnable {
 	 */
 	public void parametrage()
 	{
-		String cmd  ="{\"configuration\":{\"distance_arret\":"+this.saConfig.getDistanceArret()+",\"vitesse_max\":"+this.saConfig.getVitesseMax()+"}}\n" ; 
-		this.send(cmd);
+		if(this._socket != null) 
+			if(this._socket.isConnected())
+			{	
+				String cmd  ="{\"configuration\":{\"distance_arret\":"+this.saConfig.getDistanceArret()+",\"vitesse_max\":"+this.saConfig.getVitesseMax()+"}}\n" ; 
+				this.send(cmd);
+			}
+
 	}
-	
+
+
+
 	/**
 	 * Arret de la connexion
 	 */
 	public void arret() {
 		// TODO Auto-generated method stub
-			
+
 		this.close();
 		this.sonListenerTcp.stats("Connexion fermée");	
 

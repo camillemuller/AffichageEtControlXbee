@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
@@ -222,6 +223,29 @@ public class ConfigurationHandler {
 	}
 	
 	
+	public void setVitesseMax(int vitesseMax)
+	{
+		try {
+			List<String> sesParams = this.getSesparams();
+			sesParams.set(8, Integer.toString(vitesseMax));	
+			this.sauvegarde(sesParams);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void setDistanceArret(int distanceArret)
+	{
+		try {
+			List<String> sesParams = this.getSesparams();
+			sesParams.set(7, Integer.toString(distanceArret));	
+			this.sauvegarde(sesParams);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Sauvegare des parametres dans le xml 
 	 * @param sesParams sous formes d'une arraylist<String>
@@ -229,7 +253,7 @@ public class ConfigurationHandler {
 	public void sauvegarde(List<String> sesParams)
 	{
 		File ee = new File("Configuration.xml");
-		ee.delete();
+	ee.delete();
 		Element racine = new Element("Configuration");
 		Document document = new Document(racine);
 		//On crée un nouvel Element etudiant et on l'ajoute
