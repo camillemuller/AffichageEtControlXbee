@@ -18,6 +18,7 @@ public class HeartBit extends Thread {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		synchronized (this) {
 		while(run)
 		{
 			try {
@@ -30,6 +31,6 @@ public class HeartBit extends Thread {
 				e.printStackTrace();
 			}
 		}
-	}
+	}}
 
 }
