@@ -26,6 +26,12 @@ public class ClientRaspberryPI implements Runnable {
 	private BufferedReader _response;
 	private ConfigurationHandler saConfig;
 	private HeartBit sonHt;
+	
+	
+	public static boolean testConnexionClientTcp()
+	{
+		return true;
+	}
 
 
 	/**

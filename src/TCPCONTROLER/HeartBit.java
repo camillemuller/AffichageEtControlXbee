@@ -19,18 +19,18 @@ public class HeartBit extends Thread {
 	public void run() {
 		// TODO Auto-generated method stub
 		synchronized (this) {
-		while(run)
-		{
-			try {
-				// Wait 200 ms
-				this.wait(200);
-				// Send heartBit
-				this.sonCp.send("{\"heartbit\"=\"alive\"}");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			while(run)
+			{
+				try {
+					// Wait 200 ms
+					this.wait(200);
+					// Send heartBit
+					this.sonCp.send("{\"heartbit\"=\"alive\"}");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
-	}}
+		}}
 
 }
