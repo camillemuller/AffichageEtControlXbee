@@ -133,6 +133,7 @@ public class mainWindow {
 		gestionFenetre.getContentPane().add(lblNbClientServer);
 		
 		slider_Vitesse = new JSlider();
+		this.slider_Vitesse.setValue(this.saConfig.getVitesseMax());
 		slider_Vitesse.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				
@@ -152,6 +153,7 @@ public class mainWindow {
 		gestionFenetre.getContentPane().add(slider_Vitesse);
 		
 		slider_Arret = new JSlider();
+		this.slider_Arret.setValue(this.saConfig.getDistanceArret());
 		slider_Arret.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				
