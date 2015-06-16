@@ -150,7 +150,7 @@ public class ConfigurationHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
-			return 10;
+			return 50;
 
 		}
 	}
@@ -166,7 +166,7 @@ public class ConfigurationHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Fichier xml n'existe pas");
-			return 10;
+			return 25;
 		}
 	}
 
