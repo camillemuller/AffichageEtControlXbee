@@ -100,7 +100,7 @@ public class mainWindow {
 		btnNewButton.setBounds(6, 11, 131, 50);
 		gestionFenetre.getContentPane().add(btnNewButton);
 
-		btnConnect = new JButton("Connection");
+		btnConnect = new JButton("Connexion");
 		btnConnect.setBounds(6, 73, 131, 46);
 		gestionFenetre.getContentPane().add(btnConnect);
 
@@ -290,6 +290,7 @@ public class mainWindow {
 	{
 
 		this.PanelVoiture.dispose();
+		this.leViewer.stop();
 		this.leViewer.dispose();
 		try
 		{
