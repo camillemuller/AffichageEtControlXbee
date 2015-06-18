@@ -25,7 +25,7 @@ public class HeartBit extends Thread {
 					// Wait 200 ms
 					this.wait(200);
 					// Send heartBit
-					this.sonCp.send("{\"heartbit\"=\"alive\"}");
+					this.sonCp.send("{\"heartbit\":\"alive\"}\n");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
