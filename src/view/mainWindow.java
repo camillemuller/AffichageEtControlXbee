@@ -172,8 +172,8 @@ public class mainWindow {
 		slider_Arret.setBounds(286, 131, 190, 29);
 		gestionFenetre.getContentPane().add(slider_Arret);
 		
-		JLabel lblVitesseMax = new JLabel("Vitesse maximal (%) :");
-		lblVitesseMax.setBounds(144, 103, 136, 16);
+		JLabel lblVitesseMax = new JLabel("Vitesse maximale (%) :");
+		lblVitesseMax.setBounds(144, 103, 152, 16);
 		gestionFenetre.getContentPane().add(lblVitesseMax);
 		
 		JLabel lblArretcm = new JLabel("Distance d'arrêt (cm) : ");
@@ -197,7 +197,7 @@ public class mainWindow {
 		btnConnect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(btnConnect.getText() == "Connection")
+				if(btnConnect.getText() == "Connexion")
 				{
 					connection();
 					btnConnect.setText("Déconnection");

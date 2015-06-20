@@ -95,15 +95,15 @@ public class ConfigurationView extends JDialog {
 		contentPanel.add(tabbedPane);
 
 		Box verticalBox = Box.createVerticalBox();
-		tabbedPane.addTab("Partie Communcation et IHM", null, verticalBox, null);
+		tabbedPane.addTab("Communication", null, verticalBox, null);
 		verticalBox.setBorder(null);
 
 		JPanel panel = new JPanel();
 		verticalBox.add(panel);
 		panel.setLayout(null);
 		{
-			lblLienDuServer = new JLabel("Lien du server : ");
-			lblLienDuServer.setBounds(6, 29, 100, 16);
+			lblLienDuServer = new JLabel("Lien du serveur : ");
+			lblLienDuServer.setBounds(6, 29, 110, 16);
 			panel.add(lblLienDuServer);
 		}
 		{
@@ -268,7 +268,7 @@ public class ConfigurationView extends JDialog {
 		TabRobot.add(TabComIhm);
 		TabComIhm.setLayout(null);
 
-		JLabel lblVitesseMaximal = new JLabel("Vitesse maximal (%) : ");
+		JLabel lblVitesseMaximal = new JLabel("Vitesse maximale (%) : ");
 		lblVitesseMaximal.setBounds(35, 133, 154, 16);
 		TabComIhm.add(lblVitesseMaximal);
 
