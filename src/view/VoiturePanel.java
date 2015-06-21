@@ -21,7 +21,7 @@ public class VoiturePanel extends JPanel {
 
 	public VoiturePanel() {
 		try {
-			image = ImageIO.read(new File("voiture.png"));
+			image = ImageIO.read(new File("img/voiture.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
