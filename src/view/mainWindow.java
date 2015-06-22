@@ -205,7 +205,7 @@ public class mainWindow {
 				else
 				{
 					disconnect();
-					btnConnect.setText("Connection");
+					btnConnect.setText("Connexion");
 				}
 				//Connection
 			}});
