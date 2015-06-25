@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-  <URL>http://141.89.114.98/cgi-bin/video640x480.mjpg?dummy=garb</URL>
+  <URL>http://192.168.1.1:8080/?action=stream</URL>
   <PORT>8080</PORT>
   <ADRRSPI>192.168.1.1</ADRRSPI>
   <PORTLEAP>5005</PORTLEAP>
